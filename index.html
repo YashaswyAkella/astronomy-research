@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Yashaswy Akella | Astronomy Research</title>
+
+  <meta name="description"
+        content="Independent astronomy projects by Yashaswy Akella.
+                 Exploring astronomical questions using public data,
+                 reproducible code, and clearly stated uncertainties.">
+
+  <style>
+    :root {
+      --background: #f4f7fb;
+      --surface: #ffffff;
+      --text: #192b43;
+      --muted: #526278;
+      --blue: #185b90;
+      --blue-light: #eaf2fa;
+      --border: #dce4ee;
+      --amber: #805b10;
+      --amber-light: #fff4d8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font: 17px/1.75 system-ui, -apple-system, BlinkMacSystemFont,
+            "Segoe UI", sans-serif;
+    }
+
+    a {
+      color: var(--blue);
+    }
+
+    a:focus-visible,
+    summary:focus-visible {
+      outline: 3px solid #c58a16;
+      outline-offset: 4px;
+    }
+
+    .container {
+      width: min(1100px, calc(100% - 40px));
+      margin-inline: auto;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: 16px;
+      top: -100px;
+      padding: 10px 16px;
+      background: white;
+      z-index: 10;
+    }
+
+    .skip-link:focus {
+      top: 12px;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px 30px;
+      padding-block: 18px;
+    }
+
+    .name {
+      color: var(--text);
+      font-size: 1.05rem;
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 24px;
+    }
+
+    nav a {
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .hero {
+      padding: 75px 0 55px;
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      font-size: 0.85rem;
+      font-weight: 750;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 850px;
+      margin: 15px 0 22px;
+      font-size: clamp(2.3rem, 6vw, 4.3rem);
+      line-height: 1.12;
+      letter-spacing: -0.045em;
+    }
+
+    h2,
+    h3 {
+      line-height: 1.35;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-top: 0;
+    }
+
+    .hero p {
+      max-width: 740px;
+      color: var(--muted);
+      font-size: 1.15rem;
+    }
+
+    .tags,
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tags {
+      margin-top: 24px;
+    }
+
+    .tag {
+      padding: 5px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 25px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    section {
+      margin-bottom: 50px;
+      scroll-margin-top: 24px;
+    }
+
+    .section-intro {
+      max-width: 780px;
+      color: var(--muted);
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 22px;
+      margin-top: 25px;
+    }
+
+    .project-card {
+      padding: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .project-card h3 {
+      margin: 18px 0 10px;
+      font-size: 1.5rem;
+    }
+
+    .project-card p {
+      color: var(--muted);
+    }
+
+    .status {
+      display: inline-block;
+      padding: 5px 11px;
+      background: var(--amber-light);
+      color: var(--amber);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .project-question {
+      color: var(--text) !important;
+      font-weight: 650;
+    }
+
+    .project-note {
+      padding: 14px 16px;
+      background: var(--background);
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    .actions {
+      margin-top: 24px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 10px 16px;
+      border: 1px solid var(--blue);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 650;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      color: white;
+      background: var(--blue);
+    }
+
+    .panel {
+      padding: clamp(24px, 4vw, 36px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .principles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .principles h3 {
+      font-size: 1.1rem;
+      margin-top: 0;
+    }
+
+    .principles p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    details {
+      padding-top: 18px;
+      margin-top: 22px;
+      border-top: 1px solid var(--border);
+    }
+
+    summary {
+      cursor: pointer;
+      color: var(--blue);
+      font-weight: 650;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 26px 0 42px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 650px) {
+      .hero {
+        padding-top: 45px;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+        font-size: 11pt;
+      }
+
+      nav,
+      .skip-link {
+        display: none;
+      }
+
+      .project-card,
+      .panel {
+        break-inside: avoid;
+      }
+
+      .button.primary {
+        color: black;
+        background: white;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header>
+  <div class="container header-inner">
+    <a class="name" href="./">Yashaswy Akella</a>
+
+    <nav aria-label="Main navigation">
+      <a href="#projects">Projects</a>
+      <a href="#approach">Approach</a>
+      <a href="#about">About</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="container">
+
+  <div class="hero">
+    <div class="eyebrow">Independent astronomy projects</div>
+
+    <h1>Exploring the Universe<br>with public data.</h1>
+
+    <p>
+      A collection of astronomy investigations, analysis code,
+      and plain-language explanations.
+    </p>
+
+    <p>
+      Each project records a question, the evidence examined,
+      and what remains uncertain. Not every investigation ends
+      in a discovery—but its methods and results can still be
+      worth sharing.
+    </p>
+
+    <div class="tags" aria-label="Research interests">
+      <span class="tag">Quasars and active galaxies</span>
+      <span class="tag">Gravitational lens candidates</span>
+      <span class="tag">Public astronomical archives</span>
+      <span class="tag">Reproducible analysis</span>
+    </div>
+  </div>
+
+  <section id="projects" aria-labelledby="projects-title">
+    <h2 id="projects-title">Research projects</h2>
+
+    <p class="section-intro">
+      Start with a simple explanation, then explore the report,
+      measurements, and code. Project labels describe their actual
+      status—not a claim of scientific confirmation.
+    </p>
+
+    <div class="project-grid">
+
+      <!-- PROJECT 1: J1237+3314 -->
+      <article class="project-card">
+        <span class="status">Exploratory · Not peer-reviewed</span>
+
+        <h3>What is beside this quasar?</h3>
+
+        <p class="project-question">
+          J1237+3314: is the faint object beside a known quasar
+          physically associated with it?
+        </p>
+
+        <p>
+          This archival investigation compares optical and radio
+          positions and examines a spectral feature collected
+          towards the faint component.
+        </p>
+
+        <p>
+          The analysis supports a close radio–optical positional
+          association and reports a feature that may be relevant
+          to the system’s interpretation.
+        </p>
+
+        <div class="project-note">
+          <strong>Current conclusion:</strong>
+          the physical relationship remains unresolved.
+          No confirmed gravitational lens or dual-AGN discovery
+          is claimed. Independent reproduction is pending.
+        </div>
+
+        <div class="tags" aria-label="Data used in this project">
+          <span class="tag">Gaia</span>
+          <span class="tag">DESI</span>
+          <span class="tag">Radio catalogues</span>
+          <span class="tag">VLASS</span>
+        </div>
+
+        <div class="actions">
+          <a class="button primary"
+             href="projects/j1237-3314/index.html">
+            Explore the project
+          </a>
+
+          <a class="button"
+             href="projects/j1237-3314/project_report.pdf">
+            Read the report
+          </a>
+        </div>
+      </article>
+
+      <!--
+        ADD FUTURE PROJECTS HERE.
+
+        Duplicate the article element above and update:
+        1. Project title and question.
+        2. Status label.
+        3. Description and current conclusion.
+        4. Data tags.
+        5. Links to the new project's folder.
+
+        Include only real projects.
+        Do not label a project "peer-reviewed" unless the relevant
+        work has completed journal peer review and been accepted.
+      -->
+
+    </div>
+  </section>
+
+  <section id="approach" class="panel"
+           aria-labelledby="approach-title">
+
+    <h2 id="approach-title">How these projects are presented</h2>
+
+    <p>
+      The aim is to make the work understandable and inspectable,
+      without making the conclusions stronger than the evidence.
+    </p>
+
+    <div class="principles">
+
+      <article>
+        <h3>Start with a clear question</h3>
+        <p>
+          Explain what is being investigated and why the available
+          observations might help.
+        </p>
+      </article>
+
+      <article>
+        <h3>Separate results from interpretation</h3>
+        <p>
+          A measured signal and its possible explanation are
+          different claims. Each needs its own supporting evidence.
+        </p>
+      </article>
+
+      <article>
+        <h3>Show the methods</h3>
+        <p>
+          Provide code, input references, numerical outputs,
+          and instructions where available.
+        </p>
+      </article>
+
+      <article>
+        <h3>Keep uncertainty visible</h3>
+        <p>
+          State assumptions, known limitations, alternative
+          explanations, and checks that remain incomplete.
+        </p>
+      </article>
+
+    </div>
+
+    <details>
+      <summary>What do the project labels mean?</summary>
+
+      <ul>
+        <li>
+          <strong>In progress:</strong>
+          work is underway and results may change.
+        </li>
+
+        <li>
+          <strong>Exploratory:</strong>
+          a documented investigation whose conclusions remain
+          provisional.
+        </li>
+
+        <li>
+          <strong>Archived:</strong>
+          work has been paused or completed as a documented
+          project. This does not imply peer review.
+        </li>
+
+        <li>
+          <strong>Peer-reviewed:</strong>
+          a linked publication has completed journal peer review.
+          This label applies to that publication, not automatically
+          to every file or later change in its repository.
+        </li>
+      </ul>
+
+      <p>
+        Sharing code or obtaining an archive DOI does not, by
+        itself, validate a scientific conclusion.
+      </p>
+    </details>
+  </section>
+
+  <section id="about" class="panel"
+           aria-labelledby="about-title">
+
+    <h2 id="about-title">About this website</h2>
+
+    <p>
+      I am Yashaswy Akella. This website documents my independent
+      astronomy projects using publicly available observations
+      and analysis tools.
+    </p>
+
+    <p>
+      My interests include quasars, active galaxies, gravitational
+      lens candidates, and comparing observations across different
+      wavelengths.
+    </p>
+
+    <p>
+      This is a personal research portfolio, not the website of
+      an observatory or research institution.
+      Project-specific references, survey credits, software details,
+      and AI-assistance disclosures are provided with each project.
+    </p>
+
+    <h3>Corrections and collaboration</h3>
+
+    <p>
+      Independent checks, relevant literature, and methodological
+      corrections are welcome. Please use the Issues section of
+      the relevant GitHub repository, identifying the project
+      and release where possible.
+    </p>
+
+    <!--
+      OPTIONAL CONTACT LINKS:
+      Add only details you are comfortable making public.
+
+      Example:
+      <p>
+        <a href="https://github.com/YOUR_USERNAME">GitHub profile</a>
+      </p>
+
+      Replace YOUR_USERNAME before enabling the link.
+      Add an ORCID only if you have registered one.
+    -->
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <p>
+      Yashaswy Akella · Independent astronomy projects
+    </p>
+
+    <p>
+      Original survey data remain subject to their providers’
+      terms. Project status and scientific limitations are stated
+      on the individual project pages.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
