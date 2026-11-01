@@ -2,7 +2,8 @@
 
 Independent astronomy investigations using public data.
 
-yashaswyakella.github.io/astronomy-research
+
+https://yashaswyakella.github.io/astronomy-research/
 
 Each project includes a plain-language explanation, methods,
 reported results, and limitations.
