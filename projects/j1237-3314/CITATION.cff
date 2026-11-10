@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+
+message: >-
+  If you use this exploratory code or analysis, please cite
+  the repository. This project is not peer-reviewed.
+
+title: "An Archival Investigation of the Close-Pair Candidate J1237+3314"
+
+type: software
+
+authors:
+  - family-names: Akella
+    given-names: Yashaswy
+
+abstract: >-
+  An exploratory archival investigation of the known close-pair
+  candidate J1237+3314 using radio-optical astrometry and
+  spectroscopy. The physical association remains unresolved.
+
+keywords:
+  - astronomy
+  - quasars
+  - spectroscopy
+  - archival research

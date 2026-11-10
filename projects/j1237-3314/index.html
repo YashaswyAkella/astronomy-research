@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Investigating J1237+3314</title>
+
+  <meta name="description"
+        content="An exploratory investigation of a known quasar and
+                 a faint object close to it in the sky.">
+
+  <style>
+    :root {
+      --background: #f4f7fb;
+      --surface: #ffffff;
+      --text: #203047;
+      --muted: #526277;
+      --blue: #175b91;
+      --border: #dce4ed;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font: 17px/1.75 system-ui, -apple-system, BlinkMacSystemFont,
+            "Segoe UI", sans-serif;
+    }
+
+    header, main, footer {
+      width: min(900px, calc(100% - 36px));
+      margin: auto;
+    }
+
+    header { padding: 40px 0 20px; }
+
+    h1 {
+      font-size: clamp(2.1rem, 6vw, 3.5rem);
+      line-height: 1.15;
+      letter-spacing: -0.035em;
+    }
+
+    h2, h3 { line-height: 1.35; }
+    h2 { margin-top: 0; }
+    a { color: var(--blue); }
+
+    a:focus-visible, summary:focus-visible {
+      outline: 3px solid #b97c0b;
+      outline-offset: 4px;
+    }
+
+    section {
+      padding: clamp(22px, 4vw, 34px);
+      margin: 22px 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .muted { color: var(--muted); }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 12px;
+      background: #e5eef8;
+      border-radius: 25px;
+      font-size: 0.85rem;
+      font-weight: 650;
+    }
+
+    .notice {
+      padding: 18px;
+      background: #fff6de;
+      border-left: 4px solid #bc9331;
+      border-radius: 6px;
+    }
+
+    details {
+      padding-top: 16px;
+      margin-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+
+    summary {
+      cursor: pointer;
+      color: var(--blue);
+      font-weight: 650;
+    }
+
+    .table-wrap { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 18px;
+    }
+
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th { background: var(--background); }
+
+    footer {
+      padding: 25px 0 40px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <p><a href="../../index.html">← All astronomy projects</a></p>
+
+  <span class="badge">Exploratory project · Not peer-reviewed</span>
+
+  <h1>What is beside this quasar?</h1>
+
+  <p class="muted">
+    An archival investigation of J1237+3314.
+  </p>
+
+  <p>By <strong>Yashaswy Akella</strong></p>
+</header>
+
+<main>
+
+  <section>
+    <h2>The short answer</h2>
+
+    <p>
+      A known quasar has a faint neighbour in the sky.
+      This project examines existing observations to understand
+      whether the objects are related.
+    </p>
+
+    <p>
+      The analysis reports a close match between a compact radio
+      position and the faint neighbour. It also reports an emission
+      feature in a spectrum taken towards that neighbour.
+    </p>
+
+    <div class="notice">
+      <strong>This is an unresolved investigation, not a confirmed
+      discovery.</strong>
+      The central measurements have not yet been independently
+      reproduced. No new gravitational lens or confirmed dual
+      active galactic nucleus is claimed.
+    </div>
+  </section>
+
+  <section>
+    <h2>What was the question?</h2>
+
+    <p>
+      Two points of light that appear close together can have
+      different explanations:
+    </p>
+
+    <ul>
+      <li>
+        They might be two images of one distant object, created
+        when a foreground mass bends its light.
+      </li>
+      <li>They might be separate objects that are physically close.</li>
+      <li>They might be unrelated objects at different distances.</li>
+    </ul>
+
+    <p>
+      The project began as a search for gravitationally lensed
+      quasars and developed into a closer examination of this
+      previously catalogued pair.
+    </p>
+
+    <details>
+      <summary>What is a quasar?</summary>
+      <p>
+        A quasar is a very bright centre of a galaxy.
+        Its light is powered by matter falling towards a
+        supermassive black hole.
+      </p>
+      <p>
+        It is one kind of active galactic nucleus, often
+        shortened to AGN.
+      </p>
+    </details>
+  </section>
+
+  <section>
+    <h2>The two objects</h2>
+
+    <p>
+      <strong>A</strong> is the bright quasar,
+      SDSS J123704.05+331423.8, at redshift approximately 1.288.
+    </p>
+
+    <p>
+      <strong>B</strong> is the faint optical source about
+      1.62 arcseconds from A. A precise radio position lies
+      very close to B.
+    </p>
+
+    <p>
+      An arcsecond measures a small angle on the sky.
+      Angular proximity does not establish physical association.
+    </p>
+
+    <p>
+      <strong>The objects and the candidate pair were already known.</strong>
+      This project did not discover them.
+    </p>
+  </section>
+
+  <section>
+    <h2>What the analysis reports</h2>
+
+    <h3>1. Radio emission is associated with B's position</h3>
+
+    <p>
+      The precise radio position is approximately 0.0047 arcseconds
+      from B's Gaia position, compared with approximately
+      1.619 arcseconds from A.
+    </p>
+
+    <p>
+      This supports associating the compact radio emission with B.
+      It does not establish B's distance or prove that it is a
+      second nucleus physically associated with A.
+    </p>
+
+    <h3>2. A spectrum taken towards B contains a feature</h3>
+
+    <p>
+      A spectrum separates light by wavelength.
+      The analysis finds extra light near 8529 Å in the spectrum
+      collected towards B.
+    </p>
+
+    <p>
+      The feature is reported in both exposures, before correcting
+      for light from A, and in an additional extraction from the
+      preprocessed detector images.
+    </p>
+
+    <p>
+      These are internal checks of the same observations,
+      not independent observational confirmation.
+    </p>
+
+    <h3>3. The feature could be oxygen emission</h3>
+
+    <p>
+      One possible identification is [O II], emission from
+      singly ionized oxygen. If correct, the gas has a redshift
+      close to A's.
+    </p>
+
+    <p>
+      The identification is not unique. Even if correct, the
+      gas might belong to A's surroundings rather than to B.
+    </p>
+
+    <details>
+      <summary>Show the reported measurements</summary>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Measurement</th>
+              <th scope="col">Reported value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Optical separation</th>
+              <td>About 1.62 arcseconds</td>
+            </tr>
+            <tr>
+              <th scope="row">Radio–Gaia separation for B</th>
+              <td>About 4.7 milliarcseconds</td>
+            </tr>
+            <tr>
+              <th scope="row">Feature wavelength</th>
+              <td>8528.6 ± 0.4 Å</td>
+            </tr>
+            <tr>
+              <th scope="row">Feature flux</th>
+              <td>
+                (2.78 ± 0.16) × 10<sup>−16</sup>
+                erg s<sup>−1</sup> cm<sup>−2</sup>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Gas redshift if the feature is [O II]</th>
+              <td>Approximately 1.2872–1.2879</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="muted">
+        These are project-reported outputs, not independently
+        validated measurements. Quoted fitting errors do not
+        include every possible systematic uncertainty.
+        The line flux follows the DESI point-source calibration.
+      </p>
+    </details>
+  </section>
+
+  <section>
+    <h2>What remains uncertain?</h2>
+
+    <ul>
+      <li>Whether the feature is correctly identified as [O II].</li>
+      <li>Whether the gas belongs to B or to A's surroundings.</li>
+      <li>Whether A and B are physically associated.</li>
+      <li>Whether this feature or interpretation was previously reported.</li>
+    </ul>
+
+    <p>
+      Atmospheric blurring sends some light from A into the
+      fibre aimed towards B. Some radio images also blend
+      their positions. The observations were taken at different
+      times and with different instruments.
+    </p>
+
+    <p>
+      The project has not definitively ruled out gravitational
+      lensing or confirmed a dual AGN.
+    </p>
+
+    <h3>What would help next?</h3>
+
+    <p>
+      Independent examination of the original measurements is
+      the immediate priority. Better-resolved spectroscopy
+      could test where the gas is located. Sharper radio
+      imaging could clarify the radio structure.
+    </p>
+  </section>
+
+  <section>
+    <h2>Explore the work</h2>
+
+    <ul>
+      <li><a href="README.md">Project README</a></li>
+      <li><a href="project_report.tex">LaTeX report source</a></li>
+    </ul>
+
+    <!-- Enable this link after adding the compiled PDF:
+    <p><a href="project_report.pdf">Read the PDF report</a></p>
+    -->
+
+    <p>
+      The accompanying analysis release contains the technical
+      methods, input references, and numerical outputs.
+      See the project README for its structure.
+    </p>
+  </section>
+
+  <section>
+    <h2>Why share an unanswered question?</h2>
+
+    <p>
+      Not every investigation ends in a confirmed discovery.
+      Sharing the methods, evidence, and limitations allows
+      others to inspect, correct, test, or reuse the work.
+    </p>
+
+    <p>
+      <strong>
+        This project records an investigation—not an
+        announcement of a confirmed new system.
+      </strong>
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  <p>
+    Yashaswy Akella · Independent astronomy project
+  </p>
+  <p>
+    Uses public survey data. References, data terms, and
+    AI-assistance information are provided in the project
+    documentation.
+  </p>
+</footer>
+
+</body>
+</html>

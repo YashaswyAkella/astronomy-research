@@ -1,0 +1,273 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=25mm]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    pdftitle={An Archival Investigation of J1237+3314},
+    pdfauthor={Yashaswy Akella}
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.6em}
+
+\newcommand{\arcsec}{\ensuremath{^{\prime\prime}}}
+\newcommand{\OII}{\ensuremath{[\mathrm{O\,II}]}}
+
+\title{
+    \textbf{What Is Beside This Quasar?}\\[0.4em]
+    \large An Archival Investigation of J1237+3314
+}
+
+\author{
+    Yashaswy Akella\\
+    \small Independent astronomy project
+}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{quote}
+\textbf{Research status.}
+This is an exploratory project report, not a peer-reviewed
+publication. The central measurements have not yet been
+independently reproduced. The project does not establish a
+new gravitational lens or a confirmed dual active galactic nucleus.
+\end{quote}
+
+\section{The question}
+
+A known quasar has a faint neighbour in the sky.
+
+A quasar is a very bright galactic nucleus powered by matter
+accreting onto a supermassive black hole.
+
+Two nearby points of light might be separate, physically
+associated objects. They might instead be unrelated objects
+at different distances, or multiple images of one distant
+source produced by gravitational lensing.
+
+This project began as a search for lensed quasars and developed
+into a closer examination of the already known pair J1237+3314.
+
+\section{The two components}
+
+Component A is the bright quasar SDSS J123704.05+331423.8,
+at redshift approximately 1.288.
+
+Component B is a fainter optical source about \(1.62\arcsec\)
+from A. The precise position of the compact radio source
+JVAS B1234+335 lies very close to B.
+
+Their Gaia DR3 identifiers are:
+\begin{itemize}
+    \item A: \texttt{1514739204708610432}.
+    \item B: \texttt{1514739204711602816}.
+\end{itemize}
+
+The objects and candidate pair were already catalogued.
+This project does not claim their discovery.
+
+\section{What data were examined?}
+
+The investigation combines optical positions, radio
+astrometry and imaging, optical images, and spectroscopy
+from public astronomical archives.
+
+The data include Gaia, DESI, the DESI Legacy Imaging Surveys,
+JVAS, FIRST, VLASS, and the Radio Fundamental Catalog.
+
+These observations have different resolutions, apertures,
+calibrations, and observing dates. A measurement near the pair
+cannot automatically be assigned to one component.
+
+\section{What the analysis reports}
+
+The numerical values below are outputs reported by the project.
+They have not been independently verified by the preparation
+of this explanatory report.
+
+\subsection{The radio position agrees with B}
+
+The radio position is approximately 4.7 milliarcseconds from
+B's Gaia position and approximately \(1.619\arcsec\) from A.
+
+The reported agreement is consistent with the combined
+positional uncertainties. It supports associating compact
+radio emission with B's position.
+
+It does not establish B's distance or prove that it is
+a second nucleus physically associated with A.
+
+\subsection{A spectral feature appears towards B}
+
+The DESI spectrum collected through the fibre centred on B
+contains an emission feature with the reported properties:
+
+\begin{itemize}
+    \item Wavelength:
+    \(8528.6 \pm 0.4\)~\AA.
+
+    \item Integrated flux:
+    \((2.78 \pm 0.16)\times10^{-16}\)
+    \(\mathrm{erg\,s^{-1}\,cm^{-2}}\).
+
+    \item Intrinsic full width at half maximum under a
+    single-Gaussian model:
+    \(550 \pm 30\ \mathrm{km\,s^{-1}}\).
+\end{itemize}
+
+The quoted errors are statistical fitting estimates, not a
+complete account of systematic uncertainties. The flux follows
+the DESI point-source calibration.
+
+The feature is reported in both individual exposures and
+in an additional extraction from the preprocessed detector
+images. It is present before correction for contamination
+from A.
+
+These are internal checks of the same underlying observations,
+not independent observational confirmation.
+
+\subsection{The feature could be oxygen emission}
+
+One possible identification is the \OII\ doublet, emitted
+by singly ionized oxygen.
+
+If correct, the gas redshift is approximately
+\(1.2872\)--\(1.2879\), close to A's redshift.
+
+The profile does not uniquely establish the doublet.
+Tests of other expected lines provide evidence against
+some alternative identifications, but other possibilities remain.
+
+Even if the oxygen identification is correct, the gas could
+belong to the surroundings of A rather than to B.
+
+\subsection{Nearby light complicates the spectra}
+
+Atmospheric blurring sends light from A into the fibre
+pointed towards B.
+
+The narrow feature persists over the tested contamination
+corrections. A corresponding significant feature is not found
+in the spectrum centred on A.
+
+However, the two spectra were collected at different dates
+and under different seeing conditions. Their comparison does
+not precisely locate the gas.
+
+\section{What remains unresolved?}
+
+The project has not established B's nuclear redshift
+or confirmed a dual active galactic nucleus.
+
+Possible explanations include:
+\begin{itemize}
+    \item A distinct active nucleus physically associated with A.
+    \item Gas around A extending towards B.
+    \item Gas related to an interaction.
+    \item An unrelated radio source projected onto nearby gas.
+\end{itemize}
+
+A compact radio feature connected to a jet from A is another
+alternative considered in the technical investigation.
+
+The optical and radio brightness patterns motivated a lensing
+test, but dust, microlensing, source structure, and aperture
+differences complicate that comparison. Gravitational lensing
+has not been definitively excluded.
+
+Radio sensitivity thresholds and spatial constraints in the
+technical analysis are model-dependent supporting results.
+
+\section{Verification and reproducibility}
+
+The repository should contain one matching release of the
+scripts, input references, outputs, and reports.
+
+The main documentation files are:
+\begin{itemize}
+    \item \path{release/README.md}.
+    \item \path{release/data_provenance.md}.
+    \item \path{release/out/results_table.md}.
+\end{itemize}
+
+A successful execution shows that a workflow runs.
+It does not automatically validate its assumptions,
+uncertainty estimates, or physical interpretation.
+
+Repeated runs by the author demonstrate repeatability.
+Independent reproduction is a separate step.
+
+If execution fails, the error and software environment
+should be documented rather than hidden.
+
+\section{The most useful next step}
+
+The immediate priority is independent examination of the
+spectral feature and radio--optical positional association.
+
+Spatially resolved spectroscopy could test where the gas lies
+and identify additional lines. Higher-resolution radio imaging
+could clarify radio emission and source structure.
+
+These observations address different questions and would not
+automatically confirm a dual AGN.
+
+\section{Conclusion}
+
+This project re-examines an already known ambiguous pair.
+It reports a close radio--optical positional association
+and a spectral feature that may help interpret the system.
+
+The physical relationship remains unresolved.
+
+The purpose of sharing the work is to document the methods,
+reported evidence, and uncertainties---not to announce
+a confirmed discovery.
+
+\section*{Data credits and AI assistance}
+
+Original survey observations retain their providers' terms
+and acknowledgement requirements. Detailed references and
+input provenance are recorded in the technical release.
+
+This explanatory report was prepared
+with assistance from ChatGPT (OpenAI).
+
+\section*{Selected data resources}
+
+\begin{itemize}
+    \item Gaia:
+    \url{https://gea.esac.esa.int/archive/}
+
+    \item DESI public data:
+    \url{https://data.desi.lbl.gov/public/dr1/}
+
+    \item Legacy Surveys:
+    \url{https://www.legacysurvey.org/}
+
+    \item SIMBAD:
+    \url{https://simbad.cds.unistra.fr/}
+
+    \item VizieR:
+    \url{https://vizier.cds.unistra.fr/}
+\end{itemize}
+
+These links identify data services. They do not replace
+the detailed citations and input references in the
+technical documentation.
+
+\end{document}
