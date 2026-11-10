@@ -1,555 +1,571 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#080e18">
-<meta name="description" content="An offline, interactive 3D exploration of planetary orbits, the Sun's motion around Sagittarius A*, the Milky Way's structure, and why every speed depends on a reference frame.">
-<meta property="og:title" content="Earth in Motion — A Moving Perspective">
-<meta property="og:description" content="Earth has never been in the same place twice — relative to the galaxy. Explore orbits, galactic motion, Sagittarius A*, and reference frames.">
-<meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%2379e0ce' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='4.5' fill='%23f4c77e'/%3E%3C/svg%3E">
-<title>Earth in Motion — A Moving Perspective</title>
-<style>
-:root{color-scheme:dark;--bg:#080e18;--panel:#101925;--panel2:#141f2d;--text:#eaf0f5;--muted:#9caebf;--line:#263445;--teal:#79e0ce;--gold:#f4c77e;--blue:#91b8e5;--radius:20px;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 78% 0%,#142335 0,transparent 48%),var(--bg);color:var(--text);line-height:1.5}button,input,select{font:inherit}button,select,summary{cursor:pointer}button,a,input,select,summary{-webkit-tap-highlight-color:transparent}button{color:inherit}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,canvas:focus-visible{outline:2px solid var(--teal);outline-offset:4px}button:disabled{opacity:.4;cursor:default}a{color:var(--teal);text-underline-offset:4px}button{touch-action:manipulation}.shell{width:min(1440px,100%);margin:auto;padding:28px 44px 36px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;gap:13px;align-items:center;font-size:14px;font-weight:650;letter-spacing:.14em}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:.19em;font-weight:450;margin-top:1px}.brand-mark{position:relative;width:34px;height:34px;flex-shrink:0;border:1px solid #72b7b7;border-radius:50%;transform:rotate(-30deg)}.brand-mark:before{content:"";position:absolute;inset:9px -8px;border:1px solid var(--teal);border-radius:50%}.brand-mark:after{content:"";position:absolute;width:6px;height:6px;left:27px;top:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 14px #f4c77e60}.top-actions{display:flex;align-items:center;gap:22px}.small-link{color:var(--muted);font-size:12px;text-decoration:none}.small-link:hover{color:var(--text)}.offline{font-size:10px;letter-spacing:.13em;color:#a7b9c9;display:flex;gap:7px;align-items:center}.offline:before{content:"";width:5px;height:5px;background:var(--teal);border-radius:50%}.hero{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;padding:35px 0 27px}.eyebrow{font-size:10px;letter-spacing:.19em;text-transform:uppercase;color:var(--teal);font-weight:600;margin:0 0 10px}h1{font-size:clamp(32px,4vw,52px);font-weight:520;letter-spacing:-.045em;line-height:1.12;margin:0}h1 em{font-family:Georgia,"Times New Roman",serif;font-weight:400;color:var(--teal)}.hero-intro{font-size:13px;max-width:360px;color:var(--muted);margin:0 0 3px;line-height:1.75}.hero-intro strong{color:#ced9e1;font-weight:500}.tabs{display:flex;gap:6px;align-items:center;margin-bottom:17px;border-bottom:1px solid var(--line)}.tab{background:none;border:0;border-bottom:2px solid transparent;padding:13px 20px 15px;color:var(--muted);font-size:12px;white-space:nowrap;margin-bottom:-1px}.tab span{font-size:10px;margin-right:9px;color:#62778c;font-variant-numeric:tabular-nums}.tab[aria-selected="true"]{color:var(--teal);border-bottom-color:var(--teal)}.tab[aria-selected="true"] span{color:var(--teal)}.tab:hover{color:var(--text)}.explorer{display:grid;grid-template-columns:minmax(0,1fr) 268px;gap:17px;align-items:stretch}.view{min-width:0;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:#0a111c}.stage{position:relative;flex:1;height:560px;min-height:420px;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 65% 38%,#111c2c,#080f19 65%)}canvas#universe{display:block;width:100%;height:100%;touch-action:none;cursor:grab}canvas#universe:active{cursor:grabbing}.scene-header{position:absolute;top:22px;left:24px;right:20px;pointer-events:none;display:flex;justify-content:space-between;gap:12px;z-index:2}.scene-title{font-size:14px;letter-spacing:-.01em;font-weight:500;margin:0 0 4px}.scene-caption{font-size:10px;color:var(--muted);margin:0;max-width:380px;line-height:1.6}.scale-tag{align-self:flex-start;flex-shrink:0;border:1px solid #4354436b;color:#d1c398;background:#1a211bc7;border-radius:6px;padding:5px 8px;font-size:9px;letter-spacing:.07em;text-transform:uppercase}.scale-tag.physical{color:#a7d4cf;background:#102522bf;border-color:#42665d70}.stage-bottom{position:absolute;bottom:18px;left:24px;right:20px;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;pointer-events:none;z-index:2}.hint{color:#92a3b7;font-size:10px;margin:0;max-width:370px;line-height:1.6}.hint strong{color:#b9c8d5;font-weight:450}.camera-tools{display:flex;gap:4px;pointer-events:auto;flex-shrink:0}.camera-tools button{border:1px solid #324052;background:#101a28df;border-radius:7px;min-width:32px;height:32px;font-size:16px;color:#c0d0df}.camera-tools .home-view{font-size:10px;padding:0 9px}.camera-tools button:hover{background:#233347}.transport{border-top:1px solid var(--line);padding:15px 20px 16px;background:#101925;display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center}.play-cluster{display:flex;align-items:center;gap:7px}.play{width:40px;height:40px;border:0;background:var(--teal);color:#102624;border-radius:50%;display:grid;place-items:center;font-weight:650;font-size:16px}.play:hover{background:#a0f1df}.step{border:0;background:transparent;color:#c0cfdd;border-radius:7px;padding:9px 8px;font-size:11px;white-space:nowrap}.step:hover{background:#1c2b3d}.time-control{min-width:0}.range-heading{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:10px;color:var(--muted);margin-bottom:4px}.range-heading output{font-variant-numeric:tabular-nums;color:var(--text);white-space:nowrap}.range-heading label{white-space:nowrap}input[type="range"]{width:100%;accent-color:var(--teal);height:14px;margin:0;display:block;cursor:pointer}.rate label{font-size:9px;text-transform:uppercase;letter-spacing:.09em;display:block;color:var(--muted);margin:0 0 4px}.rate select{width:105px;border:1px solid #324255;border-radius:6px;padding:6px 8px;background:#152234;color:#d6e2ec;font-size:11px}.sidebar{background:linear-gradient(145deg,#14202e,#101824);border:1px solid var(--line);border-radius:var(--radius);padding:21px 20px;display:flex;flex-direction:column;gap:19px}.side-block+.side-block{border-top:1px solid var(--line);padding-top:18px}.label{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#a0b1c1;margin:0 0 9px}.focus-title{display:flex;align-items:center;gap:12px;margin-bottom:13px}.planet-orb{height:35px;width:35px;background:radial-gradient(circle at 33% 28%,#d0fff5,#69c5c1 28%,#28465c 65%,#101b28 85%);border-radius:50%;box-shadow:0 0 20px #65dfd01c;flex-shrink:0}.focus-title h2{font-weight:500;font-size:23px;letter-spacing:-.04em;margin:0;line-height:1.15}.focus-title .sub{font-size:10px;color:var(--muted);margin-top:4px}.facts{display:grid;grid-template-columns:1fr 1fr;gap:12px}.fact-value{font-size:18px;letter-spacing:-.025em;font-variant-numeric:tabular-nums;white-space:nowrap}.fact-value small{font-size:11px;color:var(--muted)}.fact-label{font-size:10px;color:var(--muted);margin-top:1px}.side-copy{font-size:11px;color:#adbdcc;line-height:1.75;margin:10px 0 0}.side-copy strong{font-weight:500;color:#e0e9f0}.select-field{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:9px}.select-field label{color:#acbdcc;font-size:11px}.select-field select{font-size:11px;color:#d9e6ee;background:#142134;border:1px solid #344356;border-radius:6px;max-width:137px;padding:6px 7px;min-height:32px}.segmented{padding:3px;border:1px solid #344357;border-radius:8px;display:flex;gap:3px;background:#0b1521}.segmented button{font-size:10px;border:0;border-radius:5px;background:transparent;padding:8px 5px;flex:1;color:var(--muted)}.segmented button[aria-pressed="true"]{background:#263d42;color:#a7f1df}.toggle-row{display:flex;justify-content:space-between;align-items:center;gap:10px;color:#c1cddd;font-size:11px;margin-top:9px}.toggle-row label{display:flex;align-items:center;gap:8px;cursor:pointer}.toggle-row input{accent-color:var(--teal);width:14px;height:14px;margin:0}.preset{margin-top:12px;width:100%;border:1px solid #54766f;background:#19332f;border-radius:8px;color:#b9eddd;font-size:11px;padding:9px 8px}.preset:hover{background:#254b42}.metric-readout{margin-top:auto}.metric-readout .distance{font-size:27px;line-height:1.15;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:var(--gold)}.metric-readout .distance small{font-size:13px;color:#cab691;margin-left:4px}.metric-readout p{margin:6px 0 0;font-size:10px;color:var(--muted);line-height:1.6}.planet-legend{display:flex;align-items:center;gap:3px 13px;flex-wrap:wrap;padding:15px 4px 0}.legend-label{font-size:9px;color:#8ca1b5;letter-spacing:.13em;text-transform:uppercase;margin-right:6px}.planet-button{border:0;background:none;padding:7px 2px;color:#9fb0c0;font-size:10px;display:flex;align-items:center;gap:6px;min-height:30px}.planet-button:before{content:"";width:5px;height:5px;border-radius:50%;background:var(--planet-color)}.planet-button[aria-pressed="true"]{color:var(--text)}.planet-button[aria-pressed="true"]:before{width:7px;height:7px;box-shadow:0 0 10px var(--planet-color)}.planet-button:hover{color:var(--text)}.below-note{font-size:10px;color:#93a5b6;margin:7px 4px 0;line-height:1.7}.story{display:grid;grid-template-columns:repeat(3,1fr);margin:31px 0 27px;border-top:1px solid var(--line);padding-top:25px;gap:32px}.story article{position:relative}.story .number{font-family:Georgia,serif;font-size:28px;color:#50687d;line-height:1;margin-bottom:11px}.story h3{font-weight:500;font-size:14px;margin:0 0 8px;letter-spacing:-.015em}.story p{font-size:11px;color:#a6b8c8;line-height:1.85;margin:0}.story strong{font-weight:500;color:#ccdbe6}.science{border:1px solid var(--line);border-radius:12px;background:#10192566;margin-bottom:21px}.science summary{padding:17px 20px;font-size:12px;color:#c9d6e2}.science summary span{font-size:10px;color:#8398ac;margin-left:10px}.science-content{padding:0 20px 22px;font-size:11px;color:#a9b9c7;line-height:1.9}.science-content h3{font-size:12px;font-weight:550;margin:18px 0 7px;color:#e2eaf0}.science-content p{margin:8px 0}.science-content ul{padding-left:19px;margin:10px 0}.science-content li{padding:3px 0}.source-list{display:grid;grid-template-columns:1fr 1fr;gap:5px 20px;list-style:none;padding-left:0!important}.source-list a{color:#8ad8ce}.formula{background:#0b1320;border:1px solid #253648;padding:12px 14px;border-radius:8px;color:#d3e7e2;font-size:12px;overflow-wrap:anywhere;margin:12px 0}.footer{display:flex;justify-content:space-between;gap:20px;font-size:10px;color:#7e93a7}.footer strong{font-weight:500;color:#acbecd}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}[hidden]{display:none!important}.no-script{padding:30px;border:1px solid var(--gold);margin:20px;color:var(--gold)}.galaxy-info{margin-top:12px;padding:10px 12px;background:#0b1520;border:1px solid #2d3b4a;border-radius:7px;font-size:10px;color:#b0c0ce;line-height:1.7}
-.live-travel{display:block;margin-top:12px;font-size:11px;color:#cdb98f}.live-travel strong{color:var(--gold);font-variant-numeric:tabular-nums;font-weight:500}
-.perspectives{margin:34px 0 8px;border-top:1px solid var(--line);padding-top:26px}.section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:18px;flex-wrap:wrap}.section-head h2{font-size:clamp(22px,2.6vw,32px);font-weight:520;letter-spacing:-.035em;margin:0}.section-head p{font-size:12px;color:var(--muted);max-width:440px;margin:0;line-height:1.7}.persp-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.persp-card{background:linear-gradient(145deg,#132030,#0f1824);border:1px solid var(--line);border-radius:14px;padding:16px 16px 14px}.persp-card .frame{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#93a7ba}.persp-card .val{font-size:24px;letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin:6px 0 2px;color:var(--text);overflow-wrap:anywhere}.persp-card .val small{font-size:12px;color:var(--muted);margin-left:5px}.persp-card p{font-size:10.5px;color:#a3b5c5;margin:4px 0 0;line-height:1.6}.persp-card.hl{border-color:#4a4330}.persp-card.hl .val{color:var(--gold)}.persp-card.bh{border-color:#4a3428}.persp-card.bh .val{color:#ffc79a}.elapsed{font-size:11px;color:var(--muted);margin:12px 2px 0}.mini{font-size:12px;font-weight:500;color:#c9d6e2;margin:24px 0 10px}.equiv{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}.equiv div{border:1px dashed #2c3b4d;border-radius:12px;padding:12px}.equiv b{display:block;font-size:17px;font-weight:500;color:var(--teal);letter-spacing:-.02em}.equiv span{font-size:10px;color:#a3b5c5;line-height:1.5;display:block;margin-top:3px}.lifetime{margin-top:24px;display:grid;grid-template-columns:250px 1fr;gap:22px;background:#0e1722;border:1px solid var(--line);border-radius:16px;padding:18px 20px}.lifetime label{font-size:11px;color:#c1cddd;display:block;margin-bottom:6px}.lifetime input{width:100%;background:#142134;border:1px solid #344356;border-radius:8px;color:var(--text);padding:9px 10px;font-size:18px}.life-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 18px;align-content:center}.life-grid div{font-size:10.5px;color:#a3b5c5;line-height:1.55}.life-grid b{display:block;font-size:17px;color:var(--text);font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-.factcheck{margin:34px 0 26px;border-top:1px solid var(--line);padding-top:26px}.fc-table{width:100%;border-collapse:collapse;font-size:11px}.fc-table th{text-align:left;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#8ca1b5;font-weight:500;padding:8px 10px;border-bottom:1px solid var(--line)}.fc-table td{padding:11px 10px;border-bottom:1px solid #1d2a39;vertical-align:top;color:#b3c2d0;line-height:1.65}.fc-table td:first-child{color:#dfe8ef;width:30%}.fc-table td:nth-child(2){width:120px}.verdict{display:inline-block;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;border-radius:5px;white-space:nowrap}.v-ok{background:#123228;color:#8fe7c6}.v-approx{background:#2c2a17;color:#ead48c}.v-ctx{background:#33201a;color:#f2ad8f}.fc-summary{font-size:12px;color:#c3d1dd;line-height:1.75;margin:16px 2px 0;max-width:900px}
-@media(min-width:1500px){.stage{height:600px}}@media(max-width:1100px){.shell{padding:24px 26px 30px}.explorer{grid-template-columns:minmax(0,1fr) 246px;gap:12px}.sidebar{padding:18px 16px}.transport{gap:10px;padding:13px}.hero-intro{max-width:300px;font-size:12px}.stage{height:540px}.scene-header{left:19px;top:18px;display:block}.scale-tag{display:inline-block;margin-top:8px}.scene-caption{max-width:290px}.stage-bottom{left:19px;right:15px}.hint{max-width:230px}.camera-tools .home-view{display:none}.equiv{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:820px){.hero{padding:28px 0 20px;display:block}.hero-intro{max-width:600px;margin-top:15px;font-size:12px}.explorer{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}.side-block+.side-block{border:0;padding-top:0}.side-block{min-width:0}.metric-readout{grid-column:1/-1;border-top:1px solid var(--line)!important;padding-top:13px!important;display:flex;gap:18px;align-items:center}.metric-readout .label{margin:0}.metric-readout .distance{font-size:22px}.metric-readout p{margin:0}.stage{height:500px}.scene-header{display:flex}.scale-tag{margin:0}.camera-tools .home-view{display:block}.story{gap:22px}.fact-value{font-size:16px}.side-copy{font-size:10px}.select-field{display:block}.select-field label{display:block;margin-bottom:4px}.select-field select{width:100%;max-width:none}.focus-title h2{font-size:21px}.persp-grid{grid-template-columns:1fr 1fr}.lifetime{grid-template-columns:1fr}}
-@media(max-width:560px){.shell{padding:21px 16px 27px}.top-actions{gap:0}.offline{display:none}.brand{font-size:12px}.brand small{font-size:8px}.brand-mark{width:28px;height:28px}.brand-mark:before{inset:8px -6px}.brand-mark:after{left:23px;top:5px}.hero{padding-top:27px}h1{font-size:34px}.hero-intro{line-height:1.7;max-width:350px;font-size:11px}.tabs{gap:0}.tab{flex:1;padding:12px 5px;font-size:10px;white-space:normal;line-height:1.3}.tab span{margin-right:4px;font-size:9px}.explorer{gap:12px}.view{border-radius:15px}.stage{height:460px;min-height:390px}.scene-header{left:17px;right:14px;top:17px;display:block}.scene-title{font-size:13px}.scene-caption{max-width:260px;font-size:9px}.scale-tag{display:inline-block;margin-top:8px;font-size:8px}.stage-bottom{left:16px;right:13px;bottom:14px;gap:10px}.hint{font-size:9px;max-width:190px}.camera-tools{gap:3px}.camera-tools button{width:29px;min-width:29px;height:29px}.camera-tools .home-view{width:auto;font-size:9px;padding:0 7px}.transport{grid-template-columns:auto 1fr;gap:10px 13px;padding:12px 13px}.play{width:35px;height:35px}.step{font-size:10px;padding:7px 4px}.rate{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #27364a;padding-top:8px}.rate label{margin:0;font-size:9px}.rate select{width:122px;padding:4px 8px}.sidebar{grid-template-columns:1fr 1fr;padding:16px;border-radius:15px;gap:18px 16px}.sidebar>.side-block:first-child{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;column-gap:18px}.sidebar>.side-block:first-child>.label{grid-column:1/-1}.focus-title{margin-bottom:0}.facts{align-items:center}.sidebar>.side-block:first-child>.side-copy{grid-column:1/-1;margin-top:9px}.side-block+.side-block{border-top:1px solid var(--line);padding-top:14px}.sidebar>.metric-readout{display:block}.metric-readout .label{margin-bottom:6px}.metric-readout p{margin-top:5px}.planet-legend{gap:2px 12px;padding-top:12px}.legend-label{width:100%;margin-bottom:3px}.planet-button{font-size:10px}.story{grid-template-columns:1fr;gap:22px;margin-top:24px;padding-top:22px}.story article{padding-left:45px}.story .number{position:absolute;top:2px;left:0;font-size:26px}.story h3{font-size:13px;margin-bottom:5px}.story p{font-size:11px}.science summary{padding:15px;font-size:11px}.science summary span{display:none}.science-content{padding:0 15px 18px}.source-list{grid-template-columns:1fr}.footer{font-size:9px;gap:14px}.footer span:last-child{text-align:right}.below-note{font-size:9px}.persp-grid,.life-grid,.equiv{grid-template-columns:1fr 1fr}.persp-card .val{font-size:19px}.fc-table thead{display:none}.fc-table tr{display:block;border-bottom:1px solid var(--line);padding:8px 0}.fc-table td{display:block;border:0;padding:3px 2px;width:auto!important}}
-@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Yashaswy Akella | Astronomy Research</title>
+
+  <meta name="description"
+        content="Independent astronomy projects by Yashaswy Akella.
+                 Exploring astronomical questions using public data,
+                 reproducible code, and clearly stated uncertainties.">
+
+  <style>
+    :root {
+      --background: #f4f7fb;
+      --surface: #ffffff;
+      --text: #192b43;
+      --muted: #526278;
+      --blue: #185b90;
+      --blue-light: #eaf2fa;
+      --border: #dce4ee;
+      --amber: #805b10;
+      --amber-light: #fff4d8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font: 17px/1.75 system-ui, -apple-system, BlinkMacSystemFont,
+            "Segoe UI", sans-serif;
+    }
+
+    a {
+      color: var(--blue);
+    }
+
+    a:focus-visible,
+    summary:focus-visible {
+      outline: 3px solid #c58a16;
+      outline-offset: 4px;
+    }
+
+    .container {
+      width: min(1100px, calc(100% - 40px));
+      margin-inline: auto;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: 16px;
+      top: -100px;
+      padding: 10px 16px;
+      background: white;
+      z-index: 10;
+    }
+
+    .skip-link:focus {
+      top: 12px;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px 30px;
+      padding-block: 18px;
+    }
+
+    .name {
+      color: var(--text);
+      font-size: 1.05rem;
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 24px;
+    }
+
+    nav a {
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .hero {
+      padding: 75px 0 55px;
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      font-size: 0.85rem;
+      font-weight: 750;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 850px;
+      margin: 15px 0 22px;
+      font-size: clamp(2.3rem, 6vw, 4.3rem);
+      line-height: 1.12;
+      letter-spacing: -0.045em;
+    }
+
+    h2,
+    h3 {
+      line-height: 1.35;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-top: 0;
+    }
+
+    .hero p {
+      max-width: 740px;
+      color: var(--muted);
+      font-size: 1.15rem;
+    }
+
+    .tags,
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tags {
+      margin-top: 24px;
+    }
+
+    .tag {
+      padding: 5px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 25px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    section {
+      margin-bottom: 50px;
+      scroll-margin-top: 24px;
+    }
+
+    .section-intro {
+      max-width: 780px;
+      color: var(--muted);
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 22px;
+      margin-top: 25px;
+    }
+
+    .project-card {
+      padding: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .project-card h3 {
+      margin: 18px 0 10px;
+      font-size: 1.5rem;
+    }
+
+    .project-card p {
+      color: var(--muted);
+    }
+
+    .status {
+      display: inline-block;
+      padding: 5px 11px;
+      background: var(--amber-light);
+      color: var(--amber);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .project-question {
+      color: var(--text) !important;
+      font-weight: 650;
+    }
+
+    .project-note {
+      padding: 14px 16px;
+      background: var(--background);
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    .actions {
+      margin-top: 24px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 10px 16px;
+      border: 1px solid var(--blue);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 650;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      color: white;
+      background: var(--blue);
+    }
+
+    .panel {
+      padding: clamp(24px, 4vw, 36px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .principles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .principles h3 {
+      font-size: 1.1rem;
+      margin-top: 0;
+    }
+
+    .principles p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    details {
+      padding-top: 18px;
+      margin-top: 22px;
+      border-top: 1px solid var(--border);
+    }
+
+    summary {
+      cursor: pointer;
+      color: var(--blue);
+      font-weight: 650;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 26px 0 42px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 650px) {
+      .hero {
+        padding-top: 45px;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+        font-size: 11pt;
+      }
+
+      nav,
+      .skip-link {
+        display: none;
+      }
+
+      .project-card,
+      .panel {
+        break-inside: avoid;
+      }
+
+      .button.primary {
+        color: black;
+        background: white;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div class="shell">
-<header class="topbar"><div class="brand"><div class="brand-mark" aria-hidden="true"></div><div>EARTH IN MOTION<small>A MOVING PERSPECTIVE</small></div></div><div class="top-actions"><span class="offline">SELF-CONTAINED · OFFLINE</span><a class="small-link" href="#science">About the model ↗</a></div></header>
-<section class="hero"><div><p class="eyebrow">A small planet. A much bigger journey.</p><h1>Around the Sun.<br>Through the <em>galaxy.</em></h1></div><p class="hero-intro">Earth completes an orbit while our whole Solar System moves onward around <strong>Sagittarius A*</strong>, the black hole at the heart of the Milky Way. <strong>Change your perspective</strong> to see how every motion belongs to the same journey.<span class="live-travel">Since you opened this page, the Sun has carried you <strong id="liveKm">0</strong> km. That's about <strong id="liveEq">0.0</strong> trips around Earth's equator.</span></p></section>
-<nav class="tabs" role="tablist" aria-label="Choose a reference frame"><button class="tab" id="tab-journey" role="tab" aria-selected="true" aria-controls="explorer-panel" data-scene="journey"><span>01</span>Through the galaxy</button><button class="tab" id="tab-solar" role="tab" aria-selected="false" aria-controls="explorer-panel" data-scene="solar" tabindex="-1"><span>02</span>Around the Sun</button><button class="tab" id="tab-galaxy" role="tab" aria-selected="false" aria-controls="explorer-panel" data-scene="galaxy" tabindex="-1"><span>03</span>The Milky Way</button><button class="tab" id="tab-sgr" role="tab" aria-selected="false" aria-controls="explorer-panel" data-scene="sgr" tabindex="-1"><span>04</span>Sagittarius A*</button></nav>
-<main id="explorer-panel" role="tabpanel" aria-labelledby="tab-journey">
-<div class="explorer">
-<section class="view" aria-label="Interactive simulation">
-<div class="stage" id="stage"><canvas id="universe" role="img" tabindex="0" aria-label="Interactive three dimensional model. Drag to rotate, pinch or use plus and minus to zoom. Arrow keys rotate the view." aria-describedby="canvasSummary">This model shows planetary orbits added to the Sun's motion through the galaxy.</canvas><div class="scene-header"><div><h2 class="scene-title" id="sceneTitle">Eight planets. One moving star.</h2><p class="scene-caption" id="sceneCaption">Trails in a local Galactic frame. Camera follows the Sun.</p></div><span class="scale-tag" id="scaleTag">Illustrative scale</span></div><div class="stage-bottom"><p class="hint" id="viewHint"><strong>Drag to rotate · pinch or scroll to zoom</strong><br>Bright trail: Earth · gold line: the Sun</p><div class="camera-tools" aria-label="Camera controls"><button id="zoomOut" aria-label="Zoom out">−</button><button id="zoomIn" aria-label="Zoom in">+</button><button id="homeView" class="home-view">Reset view</button></div></div></div>
-<div class="transport"><div class="play-cluster"><button class="play" id="play" aria-label="Pause animation" aria-pressed="false"><span id="playGlyph" aria-hidden="true">Ⅱ</span></button><button class="step" id="step" aria-label="Advance one Earth year and pause">+1 year</button></div><div class="time-control"><div class="range-heading"><label for="timeline">Model time</label><output for="timeline" id="timeValue">0.00 years</output></div><input id="timeline" type="range" min="0" max="200" step="0.01" value="0" aria-label="Simulation time in Earth years"></div><div class="rate"><label for="speed">Playback speed</label><select id="speed" aria-label="Simulation speed"></select></div></div>
-</section>
-<aside class="sidebar" aria-label="Explore the model">
-<section class="side-block"><p class="label" id="focusLabel">Planet in focus</p><div class="focus-title"><div class="planet-orb" id="planetOrb" aria-hidden="true"></div><div><h2 id="focusName">Earth</h2><div class="sub" id="focusSub">Our home, on the move</div></div></div><div class="facts"><div><div class="fact-value" id="factA">1.00 <small>yr</small></div><div class="fact-label" id="factALabel">orbital period</div></div><div><div class="fact-value" id="factB">1.00 <small>AU</small></div><div class="fact-label" id="factBLabel">semimajor axis</div></div></div><p class="side-copy" id="focusCopy">The highlighted trail combines Earth's orbit with the Sun's onward motion.</p></section>
-<section class="side-block" id="localControls"><p class="label">What to show</p><div class="select-field"><label for="planetSet">Planets</label><select id="planetSet"><option value="all">All eight</option><option value="inner">Inner four</option><option value="focus">Focused planet only</option></select></div><div class="select-field"><label for="trailLength">Trail history</label><select id="trailLength"><option value="1">1 year</option><option value="4">4 years</option><option value="8" selected>8 years</option><option value="20">20 years</option><option value="200">200 years</option></select></div><div class="toggle-row"><label><input id="showTrails" type="checkbox" checked>Motion trails</label></div><div class="toggle-row"><label><input id="showOrbits" type="checkbox" checked>Orbit guides</label></div><div class="toggle-row"><label><input id="showPlanes" type="checkbox" checked>Reference planes</label></div><div class="toggle-row"><label><input id="showLabels" type="checkbox" checked>Planet names</label></div><div class="toggle-row"><label><input id="showSgr" type="checkbox" checked>Milky Way &amp; Sgr A* backdrop</label></div></section>
-<section class="side-block" id="scaleControls"><p class="label">Choose the scale</p><div class="segmented" aria-label="Spatial scale"><button data-scale="illustrative" aria-pressed="true">Illustrative</button><button data-scale="physical" aria-pressed="false">Physical</button></div><p class="side-copy" id="scaleCopy">Orbit spacing compressed; forward travel reduced <strong>24.3×</strong> at Earth's scale. Period ratios preserved.</p><button class="preset" id="earthCompare">See Earth's true one-year path ↗</button></section>
-<section class="side-block" id="galaxyControls" hidden><p class="label">The Milky Way</p><div class="toggle-row"><label><input id="showBob" type="checkbox" checked>Vertical oscillation (15× taller)</label></div><div class="toggle-row"><label><input id="showEpi" type="checkbox" checked>Radial wobble (epicycle)</label></div><div class="toggle-row"><label><input id="galRotate" type="checkbox" checked>Arms &amp; bar rotate</label></div><div class="toggle-row"><label><input id="showTracers" type="checkbox" checked>Other stars’ orbits</label></div><div class="toggle-row"><label><input id="showArmNames" type="checkbox" checked>Arm names</label></div><div class="select-field" style="margin-top:10px"><label for="galTrailSel">Sun trail</label><select id="galTrailSel"><option value="230" selected>1 lap (230 Myr)</option><option value="920">4 laps (≈0.9 Gyr)</option></select></div><div class="segmented" style="margin-top:6px"><button data-camera="above" aria-pressed="false">From above</button><button data-camera="side" aria-pressed="false">From the side</button></div><div class="galaxy-info" id="galaxyModelNote"></div></section>
-<section class="side-block" id="sgrControls" hidden><p class="label">Zoom level</p><div class="segmented" aria-label="Sagittarius A* zoom"><button data-sgrzoom="inner" aria-pressed="true">S2 region</button><button data-sgrzoom="wide" aria-pressed="false">S-cluster</button><button data-sgrzoom="horizon" aria-pressed="false">Horizon</button></div><div id="starOnly"><div class="toggle-row"><label><input id="showStarTrails" type="checkbox" checked>Star trails</label></div><div class="toggle-row"><label><input id="showStarOrbits" type="checkbox" checked>Full orbits</label></div><div class="toggle-row"><label><input id="showSpeedLabels" type="checkbox" checked>Live speed labels</label></div><div class="toggle-row"><label><input id="showPrecess" type="checkbox">Relativistic precession (×40)</label></div><button class="preset" id="s2Peri">Watch S2’s 2018 close pass ↗</button></div><div class="galaxy-info" id="sgrInfo"></div></section>
-<section class="side-block metric-readout"><p class="label" id="distanceLabel">Sun's forward travel</p><div class="distance"><span id="distanceValue">0.00</span><small id="distanceUnit">AU</small></div><p id="distanceNote">Physical distance since model time zero, using 230 km/s.</p></section>
-</aside>
-</div>
-<div class="planet-legend" id="planetLegend" aria-label="Choose a planet to highlight"><span class="legend-label">Highlight a planet</span></div>
-<p class="below-note" id="scaleFootnote">All body sizes enlarged. 1 AU ≈ 149.6 million km.</p>
-<p class="sr-only" id="canvasSummary">A schematic view of eight planetary orbits and their paths as the Sun moves through the galaxy.</p><div class="sr-only" role="status" aria-live="polite" id="status"></div>
-<noscript><div class="no-script">Enable JavaScript in your browser to run the animation. The explanations and sources below remain available.</div></noscript>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header>
+  <div class="container header-inner">
+    <a class="name" href="./">Yashaswy Akella</a>
+
+    <nav aria-label="Main navigation">
+      <a href="#projects">Projects</a>
+      <a href="#approach">Approach</a>
+      <a href="#about">About</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="container">
+
+  <div class="hero">
+    <div class="eyebrow">Independent astronomy projects</div>
+
+    <h1>Exploring the Universe<br>with public data.</h1>
+
+    <p>
+      A collection of astronomy investigations, analysis code,
+      and plain-language explanations.
+    </p>
+
+    <p>
+      Each project records a question, the evidence examined,
+      and what remains uncertain. Not every investigation ends
+      in a discovery—but its methods and results can still be
+      worth sharing.
+    </p>
+
+    <div class="tags" aria-label="Research interests">
+      <span class="tag">Quasars and active galaxies</span>
+      <span class="tag">Gravitational lens candidates</span>
+      <span class="tag">Public astronomical archives</span>
+      <span class="tag">Reproducible analysis</span>
+    </div>
+  </div>
+
+  <section id="projects" aria-labelledby="projects-title">
+    <h2 id="projects-title">Research projects</h2>
+
+    <p class="section-intro">
+      Start with a simple explanation, then explore the report,
+      measurements, and code. Project labels describe their actual
+      status—not a claim of scientific confirmation.
+    </p>
+
+    <div class="project-grid">
+
+      <!-- PROJECT 1: J1237+3314 -->
+      <article class="project-card">
+        <span class="status">Exploratory · Not peer-reviewed</span>
+
+        <h3>What is beside this quasar?</h3>
+
+        <p class="project-question">
+          J1237+3314: is the faint object beside a known quasar
+          physically associated with it?
+        </p>
+
+        <p>
+          This archival investigation compares optical and radio
+          positions and examines a spectral feature collected
+          towards the faint component.
+        </p>
+
+        <p>
+          The analysis supports a close radio–optical positional
+          association and reports a feature that may be relevant
+          to the system’s interpretation.
+        </p>
+
+        <div class="project-note">
+          <strong>Current conclusion:</strong>
+          the physical relationship remains unresolved.
+          No confirmed gravitational lens or dual-AGN discovery
+          is claimed. Independent reproduction is pending.
+        </div>
+
+        <div class="tags" aria-label="Data used in this project">
+          <span class="tag">Gaia</span>
+          <span class="tag">DESI</span>
+          <span class="tag">Radio catalogues</span>
+          <span class="tag">VLASS</span>
+        </div>
+
+        <div class="actions">
+          <a class="button primary"
+             href="projects/j1237-3314/index.html">
+            Explore the project
+          </a>
+
+          <a class="button"
+             href="projects/j1237-3314/project_report.pdf">
+            Read the report
+          </a>
+        </div>
+      </article>
+
+      <!--
+        ADD FUTURE PROJECTS HERE.
+
+        Duplicate the article element above and update:
+        1. Project title and question.
+        2. Status label.
+        3. Description and current conclusion.
+        4. Data tags.
+        5. Links to the new project's folder.
+
+        Include only real projects.
+        Do not label a project "peer-reviewed" unless the relevant
+        work has completed journal peer review and been accepted.
+      -->
+
+    </div>
+  </section>
+
+  <section id="approach" class="panel"
+           aria-labelledby="approach-title">
+
+    <h2 id="approach-title">How these projects are presented</h2>
+
+    <p>
+      The aim is to make the work understandable and inspectable,
+      without making the conclusions stronger than the evidence.
+    </p>
+
+    <div class="principles">
+
+      <article>
+        <h3>Start with a clear question</h3>
+        <p>
+          Explain what is being investigated and why the available
+          observations might help.
+        </p>
+      </article>
+
+      <article>
+        <h3>Separate results from interpretation</h3>
+        <p>
+          A measured signal and its possible explanation are
+          different claims. Each needs its own supporting evidence.
+        </p>
+      </article>
+
+      <article>
+        <h3>Show the methods</h3>
+        <p>
+          Provide code, input references, numerical outputs,
+          and instructions where available.
+        </p>
+      </article>
+
+      <article>
+        <h3>Keep uncertainty visible</h3>
+        <p>
+          State assumptions, known limitations, alternative
+          explanations, and checks that remain incomplete.
+        </p>
+      </article>
+
+    </div>
+
+    <details>
+      <summary>What do the project labels mean?</summary>
+
+      <ul>
+        <li>
+          <strong>In progress:</strong>
+          work is underway and results may change.
+        </li>
+
+        <li>
+          <strong>Exploratory:</strong>
+          a documented investigation whose conclusions remain
+          provisional.
+        </li>
+
+        <li>
+          <strong>Archived:</strong>
+          work has been paused or completed as a documented
+          project. This does not imply peer review.
+        </li>
+
+        <li>
+          <strong>Peer-reviewed:</strong>
+          a linked publication has completed journal peer review.
+          This label applies to that publication, not automatically
+          to every file or later change in its repository.
+        </li>
+      </ul>
+
+      <p>
+        Sharing code or obtaining an archive DOI does not, by
+        itself, validate a scientific conclusion.
+      </p>
+    </details>
+  </section>
+
+  <section id="about" class="panel"
+           aria-labelledby="about-title">
+
+    <h2 id="about-title">About this website</h2>
+
+    <p>
+      I am Yashaswy Akella. This website documents my independent
+      astronomy projects using publicly available observations
+      and analysis tools.
+    </p>
+
+    <p>
+      My interests include quasars, active galaxies, gravitational
+      lens candidates, and comparing observations across different
+      wavelengths.
+    </p>
+
+    <p>
+      This is a personal research portfolio, not the website of
+      an observatory or research institution.
+      Project-specific references, survey credits, software details,
+      and AI-assistance disclosures are provided with each project.
+    </p>
+
+    <h3>Corrections and collaboration</h3>
+
+    <p>
+      Independent checks, relevant literature, and methodological
+      corrections are welcome. Please use the Issues section of
+      the relevant GitHub repository, identifying the project
+      and release where possible.
+    </p>
+
+    <!--
+      OPTIONAL CONTACT LINKS:
+      Add only details you are comfortable making public.
+
+      Example:
+      <p>
+        <a href="https://github.com/YOUR_USERNAME">GitHub profile</a>
+      </p>
+
+      Replace YOUR_USERNAME before enabling the link.
+      Add an ORCID only if you have registered one.
+    -->
+  </section>
+
 </main>
 
-<section class="perspectives" aria-labelledby="perspTitle">
-<div class="section-head"><div><p class="eyebrow">Perspective</p><h2 id="perspTitle">While you've been reading…</h2></div><p>Every counter below measures the same stretch of time, each against something different. None of them is <em>the</em> real speed. A speed only means something once you say what it's measured against.</p></div>
-<div class="persp-grid">
-<article class="persp-card"><div class="frame">Spinning with Earth · at the equator</div><div class="val"><span id="pSpin">0</span><small>km</small></div><p>0.47 km/s. At 50° latitude it's about two-thirds of that. You don't feel it, because the ground, the air and you all move together.</p></article>
-<article class="persp-card"><div class="frame">Around the Sun</div><div class="val"><span id="pOrbit">0</span><small>km</small></div><p>29.8 km/s, roughly 30 times faster than a rifle bullet. One lap is about 940 million km.</p></article>
-<article class="persp-card hl"><div class="frame">Around Sagittarius A*</div><div class="val"><span id="pGal">0</span><small>km</small></div><p>≈230 km/s. The Sun carries all eight planets, the Moon and you along with it.</p></article>
-<article class="persp-card"><div class="frame">Against the Big Bang’s afterglow</div><div class="val"><span id="pCmb">0</span><small>km</small></div><p>≈370 km/s relative to the cosmic microwave background (CMB), measured by the Planck satellite. It's the closest thing to a universal backdrop, but it's still a frame of reference, not "absolute space".</p></article>
-<article class="persp-card"><div class="frame">The whole Milky Way · against the CMB</div><div class="val"><span id="pMw">0</span><small>km</small></div><p>≈550 km/s. Our ≈230 km/s orbit points partly against the galaxy's motion, so the two add up to the Sun's ≈370. Velocities add as arrows, not just numbers.</p></article>
-<article class="persp-card"><div class="frame">Milky Way &amp; Andromeda</div><div class="val"><span id="pAnd">0</span><small>km closer</small></div><p>≈110 km/s. The two galaxies are closing in. Recent studies put the chance of a full merger within 10 billion years at roughly 50–50.</p></article>
-<article class="persp-card bh"><div class="frame">Star S2 · at its closest to Sgr A*</div><div class="val"><span id="pS2">0</span><small>km</small></div><p>≈7,700 km/s, about 2.6% of light speed, during its passes every 16 years. It slows to ≈500 km/s at the far end of its orbit.</p></article>
-<article class="persp-card bh"><div class="frame">A flare at the event horizon’s edge</div><div class="val"><span id="pFlare">0</span><small>km</small></div><p>≈113,000 km/s, around 38% of light speed. Hot spots tracked in 2018 circled the black hole in under an hour.</p></article>
-<article class="persp-card"><div class="frame">Light, for comparison</div><div class="val"><span id="pLight">0</span><small>km</small></div><p>299,792 km/s, enough for <span id="pMoon">0</span> round trips to the Moon. The Sun’s galactic speed is only 0.08% of it.</p></article>
-</div>
-<p class="elapsed" id="elapsed">You opened this page 0 s ago.</p>
-<h3 class="mini">At 230 km/s, the Sun covers…</h3>
-<div class="equiv">
-<div><b>24 s</b><span>London → New York (5,570 km)</span></div>
-<div><b>55 s</b><span>Earth’s full diameter (12,742 km)</span></div>
-<div><b>2 min 54 s</b><span>Once around Earth’s equator (40,075 km)</span></div>
-<div><b>28 min</b><span>Earth → Moon (384,400 km)</span></div>
-<div><b>7.5 days</b><span>The Earth–Sun distance (1 AU)</span></div>
-<div><b>≈5,500 yr</b><span>The distance to Proxima Centauri, our nearest star (4.24 light-years). We aren't heading there.</span></div>
-</div>
-<div class="lifetime">
-<div><p class="label">Your lifetime in motion</p><label for="age">Your age, in years</label><input id="age" type="number" min="0" max="130" step="1" value="30" inputmode="numeric"><p class="side-copy">Nothing is stored or sent anywhere. It's just arithmetic in your browser.</p></div>
-<div class="life-grid" aria-live="polite">
-<div><b id="lLaps">—</b>laps around the Sun, covering about <span id="lSunKm">—</span> km of orbit</div>
-<div><b id="lGalKm">—</b>km carried around Sagittarius A* (<span id="lAU">—</span> AU)</div>
-<div><b id="lFrac">—</b>of one galactic orbit, an arc of just <span id="lDeg">—</span>°</div>
-<div><b id="lCmb">—</b>km relative to the cosmic microwave background</div>
-<div><b id="lLy">—</b>light-years of galactic travel, against 4.24 to the nearest star</div>
-<div><b id="lWait">—</b>lifetimes like yours to complete one galactic year</div>
-</div>
-</div>
-</section>
+<footer>
+  <div class="container">
+    <p>
+      Yashaswy Akella · Independent astronomy projects
+    </p>
 
-<section class="story" aria-label="Understanding the journey"><article><div class="number">01</div><h3>The same motion, different frames.</h3><p>Relative to the Sun, Earth follows a slightly elliptical orbit. Relative to the galaxy, that orbit is carried onward. <strong>Both descriptions are valid.</strong> There is no master grid that defines “the same point in space”.</p></article><article><div class="number">02</div><h3>A winding path, stretched by speed.</h3><p>At 230 km/s, the Sun advances about <strong>48.5 AU in one Earth year</strong>, more than 18,000 km every 80 seconds. Earth’s path through the galaxy is a gentle, stretched wave. It never loops backward.</p></article><article><div class="number">03</div><h3>One much longer year.</h3><p>A galactic orbit takes roughly <strong>230 million years</strong> (modern estimates run from about 210 to 240). Dividing the Solar System’s 4.6-billion-year age by that period gives about 20 laps. That's an estimate, not a counted history.</p></article></section>
+    <p>
+      Original survey data remain subject to their providers’
+      terms. Project status and scientific limitations are stated
+      on the individual project pages.
+    </p>
+  </div>
+</footer>
 
-<section class="factcheck" aria-labelledby="fcTitle">
-<div class="section-head"><div><p class="eyebrow">Fact-check</p><h2 id="fcTitle">Checking the viral post</h2></div><p>The post that inspired this page gets the big idea right. Here is each claim, checked against published measurements.</p></div>
-<table class="fc-table">
-<thead><tr><th>Claim</th><th>Verdict</th><th>What’s actually true</th></tr></thead>
-<tbody>
-<tr><td>“We were taught Earth orbits the Sun in a closed circle.”</td><td><span class="verdict v-ctx">Needs context</span></td><td>The orbit is a slight ellipse (eccentricity 0.017). Seen from the Sun, it's very nearly closed, and even that ellipse slowly shifts over about 100,000 years.</td></tr>
-<tr><td>“Earth has never returned to the same point in space.”</td><td><span class="verdict v-ctx">Needs context</span></td><td>“The same point” needs a reference. Relative to the Sun, Earth comes back every year. Relative to the galaxy or the CMB, it never has. There is no absolute space.</td></tr>
-<tr><td>“230 km/s (828,000 km/h)”</td><td><span class="verdict v-ok">Accurate</span></td><td>The conversion is exact, and the speed matches NASA. Published estimates range from about 220 to 250 km/s.</td></tr>
-<tr><td>“More than 18,000 km every 80 seconds”</td><td><span class="verdict v-ok">Accurate</span></td><td>230 × 80 = 18,400 km.</td></tr>
-<tr><td>“Tilted 60.2° to the galactic plane”</td><td><span class="verdict v-ok">Accurate</span></td><td>The ecliptic, the plane the planets orbit in, is tilted ≈60.2° to the galaxy's plane. Earth’s orbit is also tilted about 60° to the Sun’s direction of travel.</td></tr>
-<tr><td>“Bobs up and down through the galactic disc roughly every 30 million years”</td><td><span class="verdict v-approx">Roughly right</span></td><td>The Sun crosses the galaxy's middle plane every ~30–40 Myr; a full up-and-down cycle takes about twice that. It swings only ~80 parsecs either side, so it never leaves the disc, which is hundreds of parsecs thick. Today it is ≈20 pc north of the plane and rising.</td></tr>
-<tr><td>“Open 3D corkscrew helices”</td><td><span class="verdict v-approx">Roughly right</span></td><td>Yes, but extremely stretched. Earth moves ~48.5 AU forward per lap of a ~1 AU-radius orbit, so its path is a gentle wave. The planets don't trail behind the Sun like a comet’s tail, as one well-known “vortex” animation showed.</td></tr>
-<tr><td>“One Galactic Year (230 million years)”</td><td><span class="verdict v-approx">Roughly right</span></td><td>A common round figure. Modern values for our distance from the centre and our speed give ≈210–240 Myr.</td></tr>
-<tr><td>“The very first dinosaurs were only beginning to appear”</td><td><span class="verdict v-ok">Accurate</span></td><td>The earliest definite dinosaurs date to ~233–230 million years ago (Late Triassic).</td></tr>
-<tr><td>“The last time the Sun stood where it stands today”</td><td><span class="verdict v-ctx">Needs context</span></td><td>Only the angle around the galactic centre repeats. The Sun's height, its distance from the centre (it wobbles in and out by a few hundred parsecs), its neighbouring stars and the spiral arms have all changed.</td></tr>
-<tr><td>“Our Sun has completed only 20 laps”</td><td><span class="verdict v-approx">Roughly right</span></td><td>4,600 ÷ 230 = 20, but anything from about 18 to 23 is plausible. The Sun has probably also drifted to a different distance from the centre over billions of years.</td></tr>
-</tbody></table>
-<p class="fc-summary"><strong>Bottom line:</strong> the numbers are mostly right and the main insight is sound. What the post leaves out is the deeper lesson: <em>motion is always relative to something</em>. Earth returns to the same place relative to the Sun every year, and never relative to the galaxy. Both statements are true at once.</p>
-</section>
-
-<details class="science" id="science"><summary>Read the science & model notes <span>Reference frames, scales, assumptions, and sources</span></summary><div class="science-content">
-<h3>What the animation means</h3><p>There is no universal, stationary grid defining “the same point in space.” Earth returns near the same position relative to the Sun after a year while the Solar System has advanced relative to the Milky Way. The Sun and planets share Galactic motion; gravity holds the planetary system together.</p><div class="formula">Planet's Galactic position = Sun's Galactic position + planet's position relative to the Sun</div>
-<h3>What is physical, and what is simplified</h3><ul><li><strong>Planetary motion:</strong> fixed Kepler ellipses from JPL's approximate J2000 elements. Perturbations, the Sun's wobble, and slow orbital evolution are omitted. This is not an ephemeris.</li><li><strong>Illustrative scale:</strong> each planet's orbit is rescaled so its displayed semimajor axis is √a (a in AU). Solar drift is 2 display units per year instead of 48.52 AU per year. Period ratios are preserved.</li><li><strong>Physical scale:</strong> orbital distances and solar displacement share one AU scale. Markers remain enlarged.</li><li><strong>Local Galactic motion:</strong> a straight path at 230 km/s toward Galactic longitude 90° (toward Cygnus). The Sun's ≈18 km/s motion relative to its neighbours is omitted. In this frame Earth's speed swings between about 216 and 246 km/s over a year.</li><li><strong>Sky backdrop:</strong> the Milky Way band, Sgr A* (l = 0°), Andromeda (l = 121.2°, b = −21.6°), the Large Magellanic Cloud (l = 280.5°, b = −32.9°) and the Small Magellanic Cloud (l = 302.8°, b = −44.3°) are placed in their real Galactic directions.</li><li><strong>Milky Way view:</strong> a 230-Myr circular orbit (≈8.6 kpc at 230 km/s); a 64-Myr vertical oscillation of ≈78 pc, shown 15× taller and phased so the Sun is now ≈20 pc north and rising; and a radial epicycle of ≈300 pc with a ≈166-Myr period, phased so the Sun is currently moving slightly inward (consistent with its measured U ≈ 11 km/s). The bar is oriented ≈27° from the Sun–centre line. The four arms follow a 13° pitch, placed so the Sun lies in the Orion Spur between the Sagittarius–Carina and Perseus arms. Arms rotate rigidly (≈220 Myr per turn) and the bar faster (≈160 Myr). Real pattern speeds are uncertain, and arms are density waves, not fixed groups of stars. Blue tracer stars follow a flat rotation curve (230 km/s at every radius), so inner stars lap the Sun. Time 0 is today.</li><li><strong>Sagittarius A* · stars:</strong> approximate published orbits (Gillessen et al. 2017; GRAVITY 2018–2020) at an assumed 8.28 kpc. S4714 (Peißker et al. 2020) is a disputed candidate. Speeds come from the vis-viva equation. The precession option uses the general-relativity value 6πGM/[c²a(1−e²)] per orbit (≈12′ for S2), multiplied by 40 so it can be seen.</li><li><strong>Sagittarius A* · horizon:</strong> a non-spinning black hole with 1 Rg = GM/c² ≈ 6.35 million km. It shows the event horizon (2 Rg), photon sphere (3 Rg), approximate shadow edge (≈5.2 Rg), innermost stable orbit (6 Rg) and a hot spot at 7 Rg. Orbit periods use Newtonian Kepler timing (≈2.2·r<sup>1.5</sup> min); light bending and Doppler beaming are not drawn.</li><li><strong>Perspective counters:</strong> Earth's spin 0.465 km/s; orbit 29.78 km/s; galactic 230 km/s; Sun vs CMB 369.8 km/s; Milky Way vs CMB ≈552 km/s; Andromeda approach ≈110 km/s; S2 pericentre ≈7,700 km/s; hot spot ≈0.38 c.</li></ul>
-<h3>A clarification about “30 million years”</h3><p>A complete up-and-down oscillation and the interval between midplane crossings are different: there are two crossings per cycle. Estimates of the crossing interval cluster around 30–40 Myr depending on the assumed density of the disc. This explorer uses 64 Myr per full cycle (crossings every 32 Myr).</p>
-<h3>Sagittarius A* and the galactic centre</h3><p>Sagittarius A* is a black hole of about 4.3 million solar masses, ≈26,700 light-years away (8.18 kpc). Its mass was weighed using the very star orbits shown in view 04. The Sun's orbit is governed by the combined mass of the inner galaxy (stars, gas and dark matter); Sgr A* marks the centre but supplies only a tiny fraction of that pull at our distance. Seen from Earth, Sgr A* drifts about 6.4 milliarcseconds per year across the sky. That drift is the reflection of our own orbital motion.</p>
-<h3>Sources & further reading</h3><ul class="source-list"><li><a href="https://science.nasa.gov/solar-system/solar-system-facts/" target="_blank" rel="noopener noreferrer">NASA · Solar System facts</a><br>Galactic speed, period, age, and AU.</li><li><a href="https://ssd.jpl.nasa.gov/planets/approx_pos.html" target="_blank" rel="noopener noreferrer">NASA JPL · Approximate planetary positions</a><br>Kepler equations and J2000 elements.</li><li><a href="https://gea.esac.esa.int/archive/documentation/GEDR3/Introduction/chap_cu0int/cu0int_sec_mission/cu0int_ssec_scanning_law_concepts.html" target="_blank" rel="noopener noreferrer">ESA Gaia · Ecliptic and Galactic coordinates</a><br>The relationship between the two planes.</li><li><a href="https://arxiv.org/abs/1904.05721" target="_blank" rel="noopener noreferrer">GRAVITY Collaboration (2019)</a><br>Distance to the Galactic centre.</li><li><a href="https://arxiv.org/abs/1809.03507" target="_blank" rel="noopener noreferrer">Bennett & Bovy (2019)</a><br>The Sun's height above the midplane.</li><li><a href="https://arxiv.org/abs/0912.3693" target="_blank" rel="noopener noreferrer">Schönrich, Binney & Dehnen (2010)</a><br>The Sun's motion relative to nearby stars.</li><li><a href="https://arxiv.org/abs/1602.07702" target="_blank" rel="noopener noreferrer">Bland-Hawthorn & Gerhard (2016)</a><br>The Milky Way's bar, disc and rotation.</li><li><a href="https://arxiv.org/abs/1910.03357" target="_blank" rel="noopener noreferrer">Reid et al. (2019)</a><br>Spiral arms mapped with masers.</li><li><a href="https://www.nature.com/articles/314073a0" target="_blank" rel="noopener noreferrer">Thaddeus & Chanan (1985)</a><br>Vertical half-period.</li><li><a href="https://academic.oup.com/mnras/article/483/3/3971/5234256" target="_blank" rel="noopener noreferrer">Feng & Jones (2019)</a><br>Uncertainty in the Sun's trajectory.</li><li><a href="https://arxiv.org/abs/1807.06205" target="_blank" rel="noopener noreferrer">Planck Collaboration (2018)</a><br>Our motion relative to the CMB.</li><li><a href="https://arxiv.org/abs/1205.6864" target="_blank" rel="noopener noreferrer">van der Marel et al. (2012)</a><br>Andromeda's approach velocity.</li><li><a href="https://eventhorizontelescope.org/blog/astronomers-reveal-first-image-black-hole-heart-our-galaxy" target="_blank" rel="noopener noreferrer">Event Horizon Telescope (2022)</a><br>First image of Sagittarius A*.</li><li><a href="https://doi.org/10.3847/1538-4357/aa5c41" target="_blank" rel="noopener noreferrer">Gillessen et al. (2017)</a><br>Orbits of the S-stars.</li><li><a href="https://doi.org/10.1051/0004-6361/201833718" target="_blank" rel="noopener noreferrer">GRAVITY Collaboration (2018)</a><br>S2’s 2018 closest pass.</li><li><a href="https://arxiv.org/abs/1810.12641" target="_blank" rel="noopener noreferrer">GRAVITY Collaboration (2018b)</a><br>Hot spots orbiting near the innermost stable orbit.</li><li><a href="https://arxiv.org/abs/2004.07187" target="_blank" rel="noopener noreferrer">GRAVITY Collaboration (2020)</a><br>Schwarzschild precession of S2.</li><li><a href="https://ui.adsabs.harvard.edu/abs/2020ApJ...899...50P" target="_blank" rel="noopener noreferrer">Peißker et al. (2020)</a><br>Faint fast stars, including S4714.</li><li><a href="https://arxiv.org/abs/2001.04386" target="_blank" rel="noopener noreferrer">Reid & Brunthaler (2020)</a><br>The apparent motion of Sgr A* across the sky.</li></ul><p>Inspired by a <a href="https://x.com/philosophyofphy/status/2117158973141033265" target="_blank" rel="noopener noreferrer">post on X</a>, fact-checked above.</p><h3>Controls</h3><p>Drag with a mouse or one finger to rotate; scroll, pinch, or use +/− to zoom. With the canvas focused, use arrow keys to rotate, +/− to zoom, and R to reset the view. Space pauses or resumes outside form controls. The timeline pauses playback when moved. Reduced-motion preferences start the animation paused.</p>
-</div></details>
-<footer class="footer"><span><strong>EARTH IN MOTION</strong> · An exploration of perspective</span><span>Made to explore. Built to work offline.</span></footer>
-</div>
-<script>
-(function () {
-  'use strict';
-  // Educational fixed-orbit model, not an ephemeris (JPL J2000 elements).
-  const AU_KM = 149597870.7;
-  const SEC_PER_YEAR = 365.25 * 86400;
-  const SUN_SPEED_KM_S = 230;
-  const SUN_AU_PER_YEAR = SUN_SPEED_KM_S * SEC_PER_YEAR / AU_KM;
-  const TAU = 2 * Math.PI;
-  const DEG = Math.PI / 180;
-  // Galactic axes: +x toward the Galactic centre, +y toward l=90° (travel), +z north Galactic pole.
-  const ECL_TO_GAL = [
-    [-0.0548755604162154, -0.9938213790429394, -0.0964766263205566],
-    [ 0.4941094278755837, -0.1109907335846602,  0.8622858750685891],
-    [-0.8676661490190047, -0.0003515900012412,  0.4971471917158955]
-  ];
-  const PLANETS = [
-    {id:'mercury', name:'Mercury', a:0.38709927, e:0.20563593, i:7.00497902, L:252.25032350, peri:77.45779628, node:48.33076593, period:0.2408467, color:'#bac8d4', radius:3.4},
-    {id:'venus', name:'Venus', a:0.72333566, e:0.00677672, i:3.39467605, L:181.97909950, peri:131.60246718, node:76.67984255, period:0.61519726, color:'#e4bb82', radius:4.8},
-    {id:'earth', name:'Earth', a:1.00000261, e:0.01671123, i:-0.00001531, L:100.46457166, peri:102.93768193, node:0, period:1.0000174, color:'#65dfd0', radius:5.8},
-    {id:'mars', name:'Mars', a:1.52371034, e:0.09339410, i:1.84969142, L:-4.55343205, peri:-23.94362959, node:49.55953891, period:1.8808476, color:'#ef927b', radius:4.3},
-    {id:'jupiter', name:'Jupiter', a:5.20288700, e:0.04838624, i:1.30439695, L:34.39644051, peri:14.72847983, node:100.47390909, period:11.862615, color:'#e9bf94', radius:8},
-    {id:'saturn', name:'Saturn', a:9.53667594, e:0.05386179, i:2.48599187, L:49.95424423, peri:92.59887831, node:113.66242448, period:29.447498, color:'#d6c29b', radius:7},
-    {id:'uranus', name:'Uranus', a:19.18916464, e:0.04725744, i:0.77263783, L:313.23810451, peri:170.95427630, node:74.01692503, period:84.016846, color:'#93cce9', radius:5.7},
-    {id:'neptune', name:'Neptune', a:30.06992276, e:0.00859048, i:1.77004347, L:-55.12002969, peri:44.96476227, node:131.78422574, period:164.79132, color:'#8b9cf2', radius:5.7}
-  ];
-  function toGalactic(v) {
-    return [
-      ECL_TO_GAL[0][0]*v[0] + ECL_TO_GAL[0][1]*v[1] + ECL_TO_GAL[0][2]*v[2],
-      ECL_TO_GAL[1][0]*v[0] + ECL_TO_GAL[1][1]*v[1] + ECL_TO_GAL[1][2]*v[2],
-      ECL_TO_GAL[2][0]*v[0] + ECL_TO_GAL[2][1]*v[1] + ECL_TO_GAL[2][2]*v[2]
-    ];
-  }
-  const bases = new WeakMap();
-  function basis(p) {
-    let b = bases.get(p); if (b) return b;
-    const w=(p.peri-p.node)*DEG, n=p.node*DEG, i=p.i*DEG;
-    const cw=Math.cos(w), sw=Math.sin(w), cn=Math.cos(n), sn=Math.sin(n), ci=Math.cos(i), si=Math.sin(i);
-    b = [toGalactic([cw*cn-sw*sn*ci, cw*sn+sw*cn*ci, sw*si]), toGalactic([-sw*cn-cw*sn*ci, -sw*sn+cw*cn*ci, cw*si])];
-    bases.set(p, b); return b;
-  }
-  function orbitAtE(p, E) {
-    const x=p.a*(Math.cos(E)-p.e), y=p.a*Math.sqrt(1-p.e*p.e)*Math.sin(E), b=basis(p);
-    return [x*b[0][0]+y*b[1][0], x*b[0][1]+y*b[1][1], x*b[0][2]+y*b[1][2]];
-  }
-  function positionAU(p, tYears) {
-    const rawM=(p.L-p.peri)*DEG + TAU*((tYears/p.period)%1);
-    const M=((rawM+Math.PI)%TAU+TAU)%TAU-Math.PI;
-    let E=M+p.e*Math.sin(M);
-    for (let k=0;k<10;k++){const d=(E-p.e*Math.sin(E)-M)/(1-p.e*Math.cos(E));E-=d;if(Math.abs(d)<1e-13)break;}
-    return orbitAtE(p, E);
-  }
-  // Galaxy schematic (time 0 = today). 230 Myr at 230 km/s implies R ≈ 8.6 kpc.
-  // Vertical: 64 Myr cycle, 78 pc amplitude, z(0) ≈ +20.8 pc and rising.
-  // Radial epicycle: ≈300 pc amplitude, ≈166 Myr period, currently moving inward.
-  const GALACTIC_PERIOD_MYR = 230, VERTICAL_PERIOD_MYR = 64, Z_AMPLITUDE_PC = 78, Z_PHASE = 0.27;
-  const EPI_PERIOD_MYR = 166, EPI_AMP_PC = 300;
-  const GALAXY_RADIUS = 7, GALAXY_RADIUS_PC = 8600;
-  function galaxyPosition(tMyr, heightFactor = 15, epicycle = true) {
-    const theta = 0.7 - TAU * tMyr / GALACTIC_PERIOD_MYR;
-    const r = GALAXY_RADIUS * (1 - (epicycle ? EPI_AMP_PC / GALAXY_RADIUS_PC * Math.sin(TAU * tMyr / EPI_PERIOD_MYR) : 0));
-    return [r*Math.cos(theta), r*Math.sin(theta),
-      GALAXY_RADIUS*Z_AMPLITUDE_PC/GALAXY_RADIUS_PC*heightFactor*Math.sin(TAU*tMyr/VERTICAL_PERIOD_MYR + Z_PHASE)];
-  }
-  window.OrbitalModel = {PLANETS, AU_KM, SEC_PER_YEAR, SUN_SPEED_KM_S, SUN_AU_PER_YEAR, ECL_TO_GAL, toGalactic, positionAU, orbitAtE, galaxyPosition,
-    GALACTIC_PERIOD_MYR, VERTICAL_PERIOD_MYR, Z_AMPLITUDE_PC, Z_PHASE, EPI_PERIOD_MYR, EPI_AMP_PC, GALAXY_RADIUS, GALAXY_RADIUS_PC};
-}());
-</script>
-<script>
-(() => {
-'use strict';
-const M = window.OrbitalModel;
-const P = M.PLANETS;
-const TAU = Math.PI * 2, D = Math.PI / 180;
-const KMS = M.AU_KM / M.SEC_PER_YEAR;
-const EARTH = P.find(p=>p.id==='earth');
-const SPEEDS = {spin:0.4651, orbit:29.78, gal:M.SUN_SPEED_KM_S, cmb:369.8, mw:552, and:110, s2:7700, flare:113000, light:299792.458};
-const $ = id => document.getElementById(id);
-const canvas = $('universe');
-const ctx = canvas.getContext('2d', {alpha:false});
-if (!ctx) { $('sceneTitle').textContent='This browser cannot draw the animation.'; return; }
-const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const state = {scene:'journey',scale:'illustrative',focus:'earth',set:'all',time:0,galTime:0,sgrTime:2010,hzTime:0,rate:0.5,galRate:10,sgrRate:1,hzRate:5,history:8,paused:!!reduceMotion,trails:true,orbits:true,planes:true,labels:true,bob:true,epi:true,galRotate:true,tracers:true,armNames:true,galTrail:230,sgr:true,sTrails:true,sOrbits:true,sLabels:true,precess:false,sgrZoom:'inner',az:0.65,el:0.42,zoom:1};
-let W=900,H=530,DPR=1,dirty=true,lastFrame=0,lastDraw=0,lastUI=0,visible=true,projection,bodyHits=[];
-const pageStart=performance.now();
-const dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
-const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-const rgba=(hex,a)=>{const n=parseInt(hex.slice(1),16);return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')';};
-const fmt=(n,d=2)=>n.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
-const bigNum=n=>{const a=Math.abs(n);if(a>=1e12)return fmt(n/1e12,2)+' trillion';if(a>=1e9)return fmt(n/1e9,2)+' billion';if(a>=1e6)return fmt(n/1e6,2)+' million';return fmt(n,0);};
-const tiny=n=>{if(!(n>0))return '0';if(n>=1)return fmt(n,2);const d=Math.ceil(-Math.log10(n))+1;return n.toFixed(Math.min(d,20));};
-const announce=text=>{$('status').textContent=text;};
-const FONT='-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif';
-let randomSeed=734871; const rand=()=>{randomSeed=(randomSeed*1664525+1013904223)>>>0;return randomSeed/4294967296;};
-const gauss=()=>{let u=0;while(!u)u=rand();return Math.sqrt(-2*Math.log(u))*Math.cos(TAU*rand());};
-const stars=Array.from({length:220},()=>({x:rand(),y:rand(),r:.3+rand()*.9,a:.12+rand()*.42}));
-
-/* ---------- Glow sprites ---------- */
-function makeSprite(r,g,b){const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d'),gr=x.createRadialGradient(32,32,0,32,32,32);gr.addColorStop(0,'rgba('+r+','+g+','+b+',1)');gr.addColorStop(.4,'rgba('+r+','+g+','+b+',.3)');gr.addColorStop(1,'rgba('+r+','+g+','+b+',0)');x.fillStyle=gr;x.fillRect(0,0,64,64);return c;}
-const SPR={warm:makeSprite(255,200,150),cool:makeSprite(150,180,235),dark:makeSprite(5,9,15),white:makeSprite(255,240,220),pink:makeSprite(255,110,170),hot:makeSprite(255,170,90)};
-function sprite(img,x,y,r,a){ctx.globalAlpha=a;ctx.drawImage(img,x-r,y-r,2*r,2*r);ctx.globalAlpha=1;}
-
-/* ---------- Milky Way galaxy model (view 03) ---------- */
-const PITCH=13*D, KP=1/Math.tan(PITCH), SUN_TH=0.7, ARM_STEP=Math.exp(TAU/4*Math.tan(PITCH));
-const PATTERN_MYR=220, BAR_MYR=160, BAR0=SUN_TH-27*D, LY_PER_UNIT=M.GALAXY_RADIUS_PC*3.2616/M.GALAXY_RADIUS;
-const ARMS=[
- {name:'Sagittarius–Carina Arm',rs:5.6,major:false,lr:4.6},
- {name:'Perseus Arm',rs:5.6*ARM_STEP,major:true,lr:9.6},
- {name:'Norma–Outer Arm',rs:5.6*ARM_STEP*ARM_STEP,major:false,lr:11.2},
- {name:'Scutum–Centaurus Arm',rs:5.6/ARM_STEP,major:true,lr:5.4}];
-ARMS.forEach(a=>{a.th0=SUN_TH-Math.log(a.rs)*KP;});
-const armTh=(a,r)=>a.th0+Math.log(r)*KP;
-const spurTh=r=>SUN_TH+Math.log(r/7.05)*3.2;
-const GAL=[],HII=[];
-function addStar(r,th,z,a,s,col,bar){GAL.push({r,ct:Math.cos(th),st:Math.sin(th),z,s,bar:!!bar,f:'rgba('+col+','+a.toFixed(3)+')'});}
-for(const a of ARMS){const n=a.major?950:520;for(let j=0;j<n;j++){const r=2.6+Math.pow(rand(),.8)*9.2;addStar(r*(1+gauss()*.035),armTh(a,r)+gauss()*(.07+.25/r),gauss()*.05,(.12+rand()*.45)*(a.major?1:.8),.6+rand()*1.1,rand()<.75?'190,215,255':'255,240,220');}}
-for(let j=0;j<90;j++){const a=ARMS[j%4],r=3+rand()*8;HII.push({r:r*(1+gauss()*.02),th:armTh(a,r)+gauss()*.05,s:.1+rand()*.16});}
-for(let j=0;j<260;j++){const r=6.1+rand()*1.9;addStar(r,spurTh(r)+gauss()*.035,gauss()*.04,.12+rand()*.35,.6+rand(),'200,220,255');}
-for(let j=0;j<1100;j++){const r=1.5-Math.log(1-rand()*.95)*3;if(r>12)continue;addStar(r,rand()*TAU,gauss()*.08,.05+rand()*.18,.5+rand()*.8,'170,190,220');}
-for(let j=0;j<550;j++){const r=Math.abs(gauss())*.9;addStar(r,rand()*TAU,gauss()*.32*Math.exp(-r/2),.12+rand()*.45,.6+rand(),'255,215,160',true);}
-for(let j=0;j<700;j++){let x=gauss()*1.5;if(Math.abs(x)>3.6)x=Math.sign(x)*3.6*rand();const y=gauss()*.45*(1-Math.abs(x)/5);addStar(Math.hypot(x,y),Math.atan2(y,x)+BAR0,gauss()*.12,.15+rand()*.4,.6+rand(),'255,205,150',true);}
-const TRACERS=[2.6,3.8,5.2,8.8,10.5].map((r,i)=>({r,ph:i*1.3+.4,T:M.GALACTIC_PERIOD_MYR*r/M.GALAXY_RADIUS}));
-const tracerPos=(tr,t)=>{const th=tr.ph-TAU*t/tr.T;return [tr.r*Math.cos(th),tr.r*Math.sin(th),0];};
-
-/* ---------- Sky backdrop (views 01–02): Milky Way band + named objects ---------- */
-const lb=(l,b)=>[Math.cos(b)*Math.cos(l),Math.cos(b)*Math.sin(l),Math.sin(b)];
-const band=[],dust=[],bandStars=[];
-for(let j=0;j<520;j++){const core=j<220,l=core?gauss()*.35:(rand()*2-1)*Math.PI,near=Math.exp(-l*l/.25);band.push({d:lb(l,gauss()*(.035+.09*near)),r:.025+.05*rand()+.06*near,a:.035+.11*near+.03*rand(),img:near>.35?SPR.warm:SPR.cool});}
-for(let j=0;j<90;j++)dust.push({d:lb(gauss()*.5,gauss()*.012),r:.015+.025*rand(),a:.35});
-for(let j=0;j<500;j++){const l=rand()<.5?gauss()*.5:(rand()*2-1)*Math.PI;bandStars.push({d:lb(l,gauss()*.08),s:rand()<.08?1.4:.8,a:.2+.55*rand()});}
-const SKY_OBJ=[
- {n:'Andromeda Galaxy · 2.5 million ly',d:lb(121.17*D,-21.57*D),r:.02,stretch:2.6,rot:-.6},
- {n:'Large Magellanic Cloud · 160,000 ly',d:lb(280.47*D,-32.89*D),r:.04},
- {n:'Small Magellanic Cloud · 200,000 ly',d:lb(302.8*D,-44.3*D),r:.025}];
-const HEADING=lb(90*D,0);
-
-/* ---------- S-stars around Sgr A* (approximate; AU at 8.28 kpc) ---------- */
-const AU_PER_ARCSEC=8280, PREC_X=40, RG_AU=0.04245;
-const S_STARS=[
- ['S2',.1255,.884,134.2,227.0,66.1,16.05,2018.38,'#9fd0ff'],
- ['S38',.1416,.818,171.1,101.1,18.0,19.2,2003.19,'#ffd39b'],
- ['S55',.1078,.721,150.1,325.5,331.5,12.8,2009.31,'#c9b2ff'],
- ['S1',.595,.556,119.1,342.0,122.3,166,2001.8,'#a8f0d0'],
- ['S8',.404,.803,74.4,315.4,346.7,92.9,1983.6,'#f6a3a3'],
- ['S12',.299,.888,33.6,230.1,317.9,58.9,1995.6,'#e6e08f'],
- ['S13',.264,.425,24.7,74.5,245.2,49.0,2004.9,'#8fb8ff'],
- ['S14',.283,.976,100.6,226.4,334.6,55.3,2000.1,'#ffb37d'],
- ['S4714',.1026,.985,127.7,129.3,357.3,12.0,2017.29,'#ff8fd0',true]
-].map(([name,asec,e,i,O,w,Pd,tp,color,cand])=>{const a=asec*AU_PER_ARCSEC,wr=w*D,n=O*D,ir=i*D,cw=Math.cos(wr),sw=Math.sin(wr),cn=Math.cos(n),sn=Math.sin(n),ci=Math.cos(ir),si=Math.sin(ir);
- const s={name,a,e,P:Pd,tp,color,cand:!!cand,b:a*Math.sqrt(1-e*e),Pv:[cw*cn-sw*sn*ci,cw*sn+sw*cn*ci,sw*si],Qv:[-sw*cn-cw*sn*ci,-sw*sn+cw*cn*ci,cw*si],GM:TAU*TAU*a**3/(Pd*Pd),dw:6*Math.PI*RG_AU/(a*(1-e*e))};
- s.map3=(x,y)=>[x*s.Pv[0]+y*s.Qv[0],x*s.Pv[1]+y*s.Qv[1],x*s.Pv[2]+y*s.Qv[2]];
- s.path=[];for(let k=0;k<=240;k++){const E=k/240*TAU;s.path.push([a*(Math.cos(E)-e),s.b*Math.sin(E)]);}return s;});
-const precAngle=(s,t)=>state.precess?s.dw*PREC_X*(t-s.tp)/s.P:0;
-function starAt(s,t){let m=TAU*(t-s.tp)/s.P;m=((m%TAU)+TAU)%TAU;let E=s.e>.8?Math.PI:m;for(let k=0;k<30;k++){const d=(E-s.e*Math.sin(E)-m)/(1-s.e*Math.cos(E));E-=d;if(Math.abs(d)<1e-12)break;}
- let x=s.a*(Math.cos(E)-s.e),y=s.b*Math.sin(E);const pa=precAngle(s,t);if(pa){const c=Math.cos(pa),sn=Math.sin(pa);const x2=x*c-y*sn;y=x*sn+y*c;x=x2;}return s.map3(x,y);}
-function starSpeed(s,p){const r=Math.hypot(p[0],p[1],p[2]);return {v:Math.sqrt(s.GM*(2/r-1/s.a))*KMS,r};}
-const cluster=Array.from({length:220},()=>({p:[gauss()*3000,gauss()*3000,gauss()*3000],a:.1+rand()*.35,r:.5+rand()*.8}));
-/* Event-horizon close-up (units: Rg = GM/c² ≈ 6.35 million km) */
-const HZ_MIN=2.22, HOT_R=7, HOT_T=HZ_MIN*Math.pow(HOT_R,1.5);
-const hzAngle=(r,t)=>TAU*t/(HZ_MIN*Math.pow(r,1.5));
-const GAS=Array.from({length:160},()=>({r:6.2+Math.pow(rand(),1.4)*11,ph:rand()*TAU,z:gauss()*.5,a:.05+rand()*.12,s:.6+rand()*1.2}));
-const ring3=(r,n=120)=>{const p=[];for(let i=0;i<=n;i++){const a=i/n*TAU;p.push([r*Math.cos(a),r*Math.sin(a),0]);}return p;};
-const SGR_ZOOM={
- inner:{title:'Sagittarius A*. Where orbits take years.',caption:'Stars within a few light-weeks of our galaxy’s black hole. Distances to scale.',info:'S2’s closest pass: <strong>≈120 AU</strong>, about 4× Neptune’s distance from the Sun. S4714 may swing in to ≈13 AU (a disputed candidate).<br>The clock here runs in <strong>years</strong>.',say:'Sagittarius A* close-up, with a calendar-year clock.'},
- wide:{title:'The S-cluster. A swarm of orbits.',caption:'Nine tracked stars on orbits tilted every which way, all around one invisible mass.',info:'Unlike the flat Solar System, these orbits point in <strong>random directions</strong>. S1 needs ≈166 years per lap; S55 only ≈13.<br>Together they weigh the black hole: <strong>4.3 million Suns</strong>.',say:'Whole S-cluster, nine stars.'},
- horizon:{title:'At the edge of the event horizon.',caption:'Flares circle Sgr A* in under an hour. Distances in gravitational radii (1 Rg ≈ 6.4 million km).',info:'In 2018 the GRAVITY instrument tracked flares circling at ≈7–10 Rg, about where <strong>Mercury</strong> would orbit if our Sun sat here, but taking ≈40 minutes instead of 88 days.<br>The clock here runs in <strong>minutes</strong>.',say:'Event-horizon close-up, with a minutes clock.'}};
-
-/* ---------- Planet orbit lookup ---------- */
-const LUT_SIZE=2048;
-const lut=new Map();
-for(const p of P){const arr=new Float64Array(LUT_SIZE*3);for(let i=0;i<LUT_SIZE;i++){const v=M.positionAU(p,i/LUT_SIZE*p.period);arr.set(v,i*3);}lut.set(p.id,arr);}
-function orbitPosition(p,t){const phase=((t/p.period)%1+1)%1;const index=phase*LUT_SIZE;const i=Math.floor(index),j=(i+1)%LUT_SIZE,f=index-i,a=lut.get(p.id),s=state.scale==='physical'?1:1/Math.sqrt(p.a);return [(a[i*3]*(1-f)+a[j*3]*f)*s,(a[i*3+1]*(1-f)+a[j*3+1]*f)*s,(a[i*3+2]*(1-f)+a[j*3+2]*f)*s];}
-function orbitGuide(p,E){const v=M.orbitAtE(p,E),s=state.scale==='physical'?1:1/Math.sqrt(p.a);return v.map(x=>x*s);}
-function earthVel(t){const d=1e-4,a=M.positionAU(EARTH,t-d),b=M.positionAU(EARTH,t+d);return [(b[0]-a[0])/(2*d),(b[1]-a[1])/(2*d),(b[2]-a[2])/(2*d)];}
-function planets(){return state.set==='all'?P:state.set==='inner'?P.slice(0,4):P.filter(p=>p.id===state.focus);}
-function drift(){return state.scene==='journey'?(state.scale==='physical'?M.SUN_AU_PER_YEAR:2):0;}
-const isLocal=()=>state.scene==='journey'||state.scene==='solar';
-const isHorizon=()=>state.scene==='sgr'&&state.sgrZoom==='horizon';
-
-function fitProjection(){const ca=Math.cos(state.az),sa=Math.sin(state.az),ce=Math.cos(state.el),se=Math.sin(state.el);const right=[-sa,ca,0],up=[-se*ca,-se*sa,ce],front=[ce*ca,ce*sa,se];let center,extentX,extentY;
-if(state.scene==='galaxy'){center=[0,0,0];extentX=23.6;extentY=23.6*Math.max(.36,Math.abs(se))+3.1;}
-else if(state.scene==='sgr'){center=[0,0,0];extentX=extentY=state.sgrZoom==='horizon'?27:state.sgrZoom==='wide'?16500:4600;}
-else{const group=planets(),R=Math.max(...group.map(p=>(state.scale==='physical'?p.a:Math.sqrt(p.a))*(1+p.e)));const travel=drift()*state.history;center=[0,-travel*.46,0];extentX=R*2.5+Math.abs(ca)*travel;extentY=R*2.5+Math.abs(se*sa)*travel;}
-const usableW=W-(W<500?54:90),usableH=H-(W<500?154:145);const scale=Math.min(usableW/extentX,usableH/extentY)*state.zoom;projection={center,right,up,front,scale};}
-function project(p){const c=projection.center,v=[p[0]-c[0],p[1]-c[1],p[2]-c[2]];return {x:W*.5+dot(v,projection.right)*projection.scale,y:H*.54-dot(v,projection.up)*projection.scale,z:dot(v,projection.front)};}
-function screenPath(points,color,width=1,alpha=1,close=false,dash=[]){if(points.length<2)return;ctx.beginPath();for(let i=0;i<points.length;i++){const q=project(points[i]);if(i===0)ctx.moveTo(q.x,q.y);else ctx.lineTo(q.x,q.y);}if(close)ctx.closePath();ctx.strokeStyle=color;ctx.globalAlpha=alpha;ctx.lineWidth=width;ctx.setLineDash(dash);ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=1;}
-function polygon(points,fill,stroke){ctx.beginPath();points.forEach((p,i)=>{const q=project(p);if(i)ctx.lineTo(q.x,q.y);else ctx.moveTo(q.x,q.y);});ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=.7;ctx.stroke();}}
-function background(){ctx.fillStyle='#080f19';ctx.fillRect(0,0,W,H);const g=ctx.createRadialGradient(W*.6,H*.43,10,W*.6,H*.43,Math.max(W,H)*.6);g.addColorStop(0,'#142135');g.addColorStop(.6,'#0c1522');g.addColorStop(1,'#080f19');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);for(const s of stars){ctx.fillStyle='rgba(179,202,225,'+s.a+')';ctx.beginPath();ctx.arc(s.x*W,s.y*H,s.r,0,TAU);ctx.fill();}}
-function textAt(text,p,color='#afc0d0',size=10,dx=0,dy=0){const q=project(p);ctx.font=size+'px '+FONT;const width=ctx.measureText(text).width;const x=clamp(q.x+dx,10,W-width-10),y=clamp(q.y+dy,105,H-68);ctx.fillStyle=color;ctx.fillText(text,x,y);}
-function screenText(text,x,y,color,size=9,weight=''){ctx.font=weight+size+'px '+FONT;const w=ctx.measureText(text).width;ctx.fillStyle=color;ctx.fillText(text,clamp(x,8,W-w-8),clamp(y,108,H-66));}
-
-/* ---------- Sagittarius A* icon ---------- */
-function skyPoint(d){const depth=-dot(d,projection.front);if(depth<.06)return null;const f=Math.min(W,H)*.72;return {x:W*.5+f*dot(d,projection.right)/depth,y:H*.5-f*dot(d,projection.up)/depth};}
-function drawBlackHole(x,y,R,label,sub){const t=performance.now()/1000;ctx.save();
- const g=ctx.createRadialGradient(x,y,R*.8,x,y,R*6);g.addColorStop(0,'rgba(255,170,95,.42)');g.addColorStop(.3,'rgba(255,120,60,.12)');g.addColorStop(1,'rgba(255,100,50,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,R*6,0,TAU);ctx.fill();
- ctx.translate(x,y);ctx.rotate(-.2);
- const lg=ctx.createLinearGradient(-R*3,0,R*3,0);lg.addColorStop(0,'rgba(255,240,215,.95)');lg.addColorStop(.5,'rgba(255,170,85,.85)');lg.addColorStop(1,'rgba(200,80,40,.45)');
- const disc=(a0,a1)=>{for(const [k,w,al] of [[1.9,.55,.95],[2.55,.42,.55],[3.2,.3,.3]]){ctx.globalAlpha=al;ctx.strokeStyle=lg;ctx.lineWidth=R*w;ctx.beginPath();ctx.ellipse(0,0,R*k,R*k*.22,0,a0,a1);ctx.stroke();}ctx.globalAlpha=1;};
- ctx.globalAlpha=.85;ctx.strokeStyle=lg;ctx.lineWidth=R*.32;ctx.beginPath();ctx.ellipse(0,0,R*1.45,R*1.35,0,Math.PI,TAU);ctx.stroke();ctx.globalAlpha=1;
- disc(Math.PI,TAU);
- ctx.fillStyle='#000';ctx.beginPath();ctx.arc(0,0,R,0,TAU);ctx.fill();
- ctx.strokeStyle='rgba(255,225,180,.9)';ctx.lineWidth=Math.max(1,R*.08);ctx.beginPath();ctx.arc(0,0,R*1.05,0,TAU);ctx.stroke();
- disc(0,Math.PI);
- for(let k=0;k<5;k++){const a=t*1.4+k*TAU/5,hx=R*2.2*Math.cos(a),hy=R*.48*Math.sin(a);if(Math.sin(a)<0&&Math.abs(hx)<R*1.1)continue;sprite(SPR.white,hx,hy,R*.5,.28);}
- ctx.restore();
- if(label){ctx.font='500 11px '+FONT;const w1=ctx.measureText('Sagittarius A*').width;ctx.font='9px '+FONT;const w2=sub?ctx.measureText(sub).width:0,w=Math.max(w1,w2);let lx=x+R*3.6;if(lx+w>W-10)lx=x-R*3.6-w;const ly=clamp(y-2,110,H-80);
-  ctx.fillStyle='rgba(8,15,25,.65)';ctx.fillRect(lx-4,ly-12,w+8,sub?28:16);ctx.font='500 11px '+FONT;ctx.fillStyle='#ffd2a6';ctx.fillText('Sagittarius A*',lx,ly);if(sub){ctx.font='9px '+FONT;ctx.fillStyle='#b9a594';ctx.fillText(sub,lx,ly+12);}}
-}
-function edgeMarker(){const d=[1,0,0],sx=dot(d,projection.right),sy=-dot(d,projection.up),len=Math.hypot(sx,sy);if(len<1e-4)return;const ux=sx/len,uy=sy/len,cx=W*.5,cy=H*.54,L=24,R=W-24,T=114,B=H-84;let k=1e9;if(ux>1e-6)k=Math.min(k,(R-cx)/ux);if(ux<-1e-6)k=Math.min(k,(L-cx)/ux);if(uy>1e-6)k=Math.min(k,(B-cy)/uy);if(uy<-1e-6)k=Math.min(k,(T-cy)/uy);
- const x=cx+ux*k,y=cy+uy*k,a=Math.atan2(uy,ux);ctx.fillStyle='rgba(255,178,112,.9)';ctx.beginPath();ctx.moveTo(x+7*Math.cos(a),y+7*Math.sin(a));ctx.lineTo(x+7*Math.cos(a+2.4),y+7*Math.sin(a+2.4));ctx.lineTo(x+7*Math.cos(a-2.4),y+7*Math.sin(a-2.4));ctx.closePath();ctx.fill();
- ctx.font='9px '+FONT;const txt='Sagittarius A* (galactic centre)',tw=ctx.measureText(txt).width;const tx=clamp(x-ux*14-tw*(ux>.2?1:ux<-.2?0:.5),10,W-tw-10),ty=clamp(y-uy*14+3,110,H-70);ctx.fillStyle='rgba(255,196,140,.85)';ctx.fillText(txt,tx,ty);}
-function drawSky(){if(!state.sgr)return;const f=Math.min(W,H)*.72;
- for(const b of band){const q=skyPoint(b.d);if(!q)continue;const r=b.r*f;if(q.x<-r||q.x>W+r||q.y<-r||q.y>H+r)continue;sprite(b.img,q.x,q.y,r,b.a);}
- for(const b of dust){const q=skyPoint(b.d);if(!q)continue;const r=b.r*f;if(q.x<-r||q.x>W+r||q.y<-r||q.y>H+r)continue;sprite(SPR.dark,q.x,q.y,r,b.a);}
- for(const s of bandStars){const q=skyPoint(s.d);if(!q||q.x<0||q.x>W||q.y<0||q.y>H)continue;ctx.fillStyle='rgba(220,228,240,'+s.a+')';ctx.fillRect(q.x,q.y,s.s,s.s);}
- for(const o of SKY_OBJ){const q=skyPoint(o.d);if(!q||q.x<20||q.x>W-20||q.y<105||q.y>H-70)continue;const r=o.r*f;ctx.save();ctx.translate(q.x,q.y);if(o.stretch){ctx.rotate(o.rot);ctx.scale(o.stretch,1);}sprite(SPR.cool,0,0,r,.6);sprite(SPR.white,0,0,r*.28,.65);ctx.restore();screenText(o.n,q.x+r*(o.stretch?1.6:1.1)+4,q.y+3,'rgba(190,210,240,.85)');}
- const hd=skyPoint(HEADING);if(hd&&hd.x>20&&hd.x<W-20&&hd.y>105&&hd.y<H-70){ctx.strokeStyle='rgba(244,199,126,.8)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(hd.x,hd.y,6,0,TAU);ctx.moveTo(hd.x-10,hd.y);ctx.lineTo(hd.x+10,hd.y);ctx.moveTo(hd.x,hd.y-10);ctx.lineTo(hd.x,hd.y+10);ctx.stroke();screenText('Heading: toward Cygnus',hd.x+12,hd.y-8,'rgba(244,199,126,.9)');}
- const gc=skyPoint([1,0,0]);
- if(gc&&gc.x>30&&gc.x<W-30&&gc.y>100&&gc.y<H-75){const sun=project([0,0,0]);ctx.setLineDash([3,6]);ctx.strokeStyle='rgba(255,170,100,.32)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(sun.x,sun.y);ctx.lineTo(gc.x,gc.y);ctx.stroke();ctx.setLineDash([]);
-  drawBlackHole(gc.x,gc.y,clamp(Math.min(W,H)*.02,6,12),true,'≈26,700 light-years away');}
- else edgeMarker();}
-
-/* ---------- Local scenes ---------- */
-function planeGeometry(){if(!state.planes)return;const ps=planets();const R=Math.max(...ps.map(p=>(state.scale==='physical'?p.a:Math.sqrt(p.a))))*1.13;const travel=drift()*state.history;const x=R*.94;const near=R*.9,far=-travel-R*.5;polygon([[-x,far,0],[x,far,0],[x,near,0],[-x,near,0]],'rgba(112,143,173,.025)','rgba(133,161,188,.13)');for(let k=1;k<6;k++){const u=-x+2*x*k/6;screenPath([[u,far,0],[u,near,0]],'#8394ad',.7,.09);const v=far+(near-far)*k/6;screenPath([[-x,v,0],[x,v,0]],'#8394ad',.7,.09);}
-const circle=[];for(let i=0;i<=96;i++)circle.push(M.toGalactic([R*Math.cos(TAU*i/96),R*Math.sin(TAU*i/96),0]));polygon(circle,'rgba(92,202,187,.027)','rgba(110,211,193,.21)');}
-function guides(){if(!state.orbits)return;for(const p of planets()){const points=[];for(let i=0;i<=180;i++)points.push(orbitGuide(p,i*TAU/180));screenPath(points,p.color,p.id===state.focus?1.1:.7,p.id===state.focus?.25:.12);}}
-function fadedTrail(points,color,width,emphasized){const chunks=10;for(let c=0;c<chunks;c++){const start=Math.floor(c*(points.length-1)/chunks),end=Math.floor((c+1)*(points.length-1)/chunks)+1;screenPath(points.slice(start,end),color,width,(emphasized?.17:.055)+(c/chunks)*(emphasized?.72:.38));}}
-function motionTrails(){if(!state.trails)return;const v=drift();for(const p of planets()){const duration=Math.min(state.history,p.period*50);const n=Math.min(4000,Math.max(100,Math.ceil(duration/p.period*74)));const points=[];for(let i=0;i<=n;i++){const ago=-duration*(1-i/n),pos=orbitPosition(p,state.time+ago);pos[1]+=v*ago;points.push(pos);}fadedTrail(points,p.color,p.id===state.focus?2.2:1.05,p.id===state.focus);}
-if(state.scene==='journey'){const points=[];for(let i=0;i<=80;i++)points.push([0,-v*state.history*(1-i/80),0]);fadedTrail(points,'#f4c77e',1.4,true);}}
-function drawArrow(from,to,color){const a=project(from),b=project(to),angle=Math.atan2(b.y-a.y,b.x-a.x);ctx.strokeStyle=color;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(b.x,b.y);ctx.lineTo(b.x-6*Math.cos(angle-.4),b.y-6*Math.sin(angle-.4));ctx.lineTo(b.x-6*Math.cos(angle+.4),b.y-6*Math.sin(angle+.4));ctx.closePath();ctx.fill();}
-function glow(q,r,color,alpha=.4){const g=ctx.createRadialGradient(q.x,q.y,r*.25,q.x,q.y,r*4);g.addColorStop(0,rgba(color,alpha));g.addColorStop(.4,rgba(color,alpha*.2));g.addColorStop(1,rgba(color,0));ctx.fillStyle=g;ctx.beginPath();ctx.arc(q.x,q.y,r*4,0,TAU);ctx.fill();}
-function drawBody(body){const q=project(body.p),isSun=body.id==='sun',selected=body.id===state.focus;const r=body.r*(W<500?.86:1);if(q.x<-30||q.x>W+30||q.y<-30||q.y>H+30)return;
-if(isSun||selected)glow(q,r,isSun?'#ffbf68':body.color,isSun?.75:.35);
-if(body.id==='saturn'){ctx.save();ctx.translate(q.x,q.y);ctx.rotate(-.4);ctx.strokeStyle='rgba(218,201,166,.6)';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(0,0,r*1.8,r*.55,0,0,TAU);ctx.stroke();ctx.restore();}
-const grad=ctx.createRadialGradient(q.x-r*.35,q.y-r*.4,r*.05,q.x+r*.15,q.y+r*.15,r*1.15);grad.addColorStop(0,isSun?'#fff5cf':'#e4f5f7');grad.addColorStop(.24,body.color);grad.addColorStop(.65,isSun?'#f6b551':body.color);grad.addColorStop(1,isSun?'#db792c':'#101a29');ctx.fillStyle=grad;ctx.beginPath();ctx.arc(q.x,q.y,r,0,TAU);ctx.fill();
-if(body.id==='earth'){ctx.save();ctx.beginPath();ctx.arc(q.x,q.y,r*.92,0,TAU);ctx.clip();ctx.fillStyle='rgba(49,108,104,.75)';ctx.beginPath();ctx.ellipse(q.x-r*.2,q.y-r*.16,r*.32,r*.56,-.45,0,TAU);ctx.fill();ctx.beginPath();ctx.ellipse(q.x+r*.57,q.y+r*.35,r*.37,r*.32,.25,0,TAU);ctx.fill();ctx.strokeStyle='rgba(225,251,245,.6)';ctx.lineWidth=.7;ctx.beginPath();ctx.ellipse(q.x-r*.1,q.y-r*.3,r*.8,r*.12,-.3,0,Math.PI*1.3);ctx.stroke();ctx.restore();}
-if(selected){ctx.strokeStyle=rgba(body.color,.65);ctx.lineWidth=.8;ctx.beginPath();ctx.arc(q.x,q.y,r+4,0,TAU);ctx.stroke();}
-bodyHits.push({id:body.id,x:q.x,y:q.y,r:Math.max(15,r+7)});body.screen=q;body.actualR=r;}
-function bodyLabels(bodies){if(!state.labels&&state.scene!=='galaxy')return;const boxes=[];const sorted=[...bodies].sort((a,b)=>((b.id===state.focus?3:b.id==='sun'?2:0)-(a.id===state.focus?3:a.id==='sun'?2:0)));
-for(const b of sorted){if(!b.screen)continue;const q=b.screen,r=b.actualR;const name=b.label||b.name;ctx.font=(b.id===state.focus?'500 ':'')+'10px '+FONT;const tw=ctx.measureText(name).width;let chosen=null;for(const [dx,dy] of [[r+10,-4],[r+10,15],[-tw-r-10,-5],[-tw-r-10,15],[r+9,28],[-tw/2,-r-14]]){const box={x:q.x+dx,y:q.y+dy-10,w:tw+6,h:14};if(box.x<8||box.x+box.w>W-8||box.y<107||box.y+box.h>H-61)continue;if(!boxes.some(a=>box.x<a.x+a.w&&box.x+box.w>a.x&&box.y<a.y+a.h&&box.y+box.h>a.y)){chosen=box;break;}}
-if(!chosen)continue;boxes.push(chosen);ctx.fillStyle='rgba(8,15,25,.7)';ctx.fillRect(chosen.x-3,chosen.y-1,chosen.w+1,chosen.h+2);ctx.fillStyle=b.id===state.focus?'#c7fff0':b.id==='sun'?'#f8d799':rgba(b.color,.88);ctx.fillText(name,chosen.x,chosen.y+10);}}
-function drawLocal(){planeGeometry();guides();motionTrails();const bodies=planets().map(p=>({...p,p:orbitPosition(p,state.time),r:p.radius}));bodies.push({id:'sun',name:'Sun',color:'#ffca7a',r:10,p:[0,0,0]});bodies.sort((a,b)=>project(a.p).z-project(b.p).z);bodies.forEach(drawBody);bodyLabels(bodies);
-if(state.scene==='journey'){const R=Math.max(...planets().map(p=>state.scale==='physical'?p.a:Math.sqrt(p.a)));drawArrow([0,R*.6,0],[0,R*1.05,0],'rgba(245,207,139,.58)');}
-drawCompass();}
-function drawCompass(){const origin={x:W-62,y:128},length=25;const axes=[{v:[1,0,0],n:'to Sgr A*',c:'#e0a77a'},{v:[0,1,0],n:'travel',c:'#d9b575'},{v:[0,0,1],n:'z',c:'#8ec2c9'}];ctx.font='8px '+FONT;for(const a of axes){const dx=dot(a.v,projection.right)*length,dy=-dot(a.v,projection.up)*length;ctx.strokeStyle=rgba(a.c,.6);ctx.beginPath();ctx.moveTo(origin.x,origin.y);ctx.lineTo(origin.x+dx,origin.y+dy);ctx.stroke();ctx.fillStyle=a.c;const tw=ctx.measureText(a.n).width;ctx.fillText(a.n,Math.min(origin.x+dx+3,W-tw-6),origin.y+dy+3);}}
-
-/* ---------- Milky Way scene (time 0 = today) ---------- */
-const MILESTONES=[{t:-538,text:'538 Myr ago · Cambrian explosion',dy:16},{t:-230,text:'230 Myr ago (1 galactic year) · first dinosaurs',dy:16},{t:-66,text:'66 Myr ago · dinosaurs end',dy:-6},{t:0,text:'Today',dy:-6}];
-const sunPos=t=>M.galaxyPosition(t,state.bob?15:0,state.epi);
-function drawMilestones(){for(const m of MILESTONES){const age=state.galTime-m.t;if(age<4||age>Math.max(700,state.galTrail))continue;const p=sunPos(m.t),q=project(p),fade=age>state.galTrail+.5?.45:1;
- ctx.globalAlpha=fade;ctx.strokeStyle='rgba(255,226,170,.85)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(q.x,q.y,4.5,0,TAU);ctx.stroke();ctx.globalAlpha=1;
- if(state.bob)screenPath([[p[0],p[1],0],p],'#e8d3a8',.7,.35*fade,false,[1,3]);textAt(m.text,p,rgba('#e9d6ae',.9*fade),9,9,m.dy);}}
-function drawTracers(t){for(const tr of TRACERS){const pts=[];for(let i=0;i<=40;i++)pts.push(tracerPos(tr,t-40*(1-i/40)));fadedTrail(pts,'#9fe3ff',1.3,true);const q=project(tracerPos(tr,t));glow(q,3,'#9fe3ff',.6);ctx.fillStyle='#c8f2ff';ctx.beginPath();ctx.arc(q.x,q.y,2.6,0,TAU);ctx.fill();screenText('lap: '+fmt(tr.T,0)+' Myr',q.x+7,q.y-6,'rgba(170,225,255,.85)',8.5);}}
-function drawArmNames(pat,bar){for(const a of ARMS){const th=armTh(a,a.lr)+pat;textAt(a.name,[a.lr*Math.cos(th),a.lr*Math.sin(th),0],a.major?'rgba(190,215,255,.92)':'rgba(170,195,230,.75)',9,4,-4);}
- const bt=BAR0+bar;textAt('Central bar',[3.9*Math.cos(bt),3.9*Math.sin(bt),0],'rgba(255,214,165,.85)',9,4,0);
- const st=spurTh(6.2)+pat;textAt('Orion Spur · our neighbourhood',[6.2*Math.cos(st),6.2*Math.sin(st),0],'rgba(200,225,255,.8)',9,-70,18);}
-function drawGalScale(){const px=10000/LY_PER_UNIT*projection.scale,x=W-28-px,y=H-74;ctx.strokeStyle='rgba(190,205,225,.7)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+px,y);ctx.moveTo(x,y-4);ctx.lineTo(x,y+4);ctx.moveTo(x+px,y-4);ctx.lineTo(x+px,y+4);ctx.stroke();ctx.font='9px '+FONT;ctx.fillStyle='rgba(190,205,225,.85)';const txt='10,000 light-years',tw=ctx.measureText(txt).width;ctx.fillText(txt,x+px-tw,y-7);}
-function drawGalaxy(){const R=M.GALAXY_RADIUS,t=state.galTime;
- const disc=[];for(let i=0;i<=100;i++)disc.push([11.8*Math.cos(i*TAU/100),11.8*Math.sin(i*TAU/100),0]);polygon(disc,'rgba(102,128,164,.03)','rgba(131,155,180,.09)');
- const pat=state.galRotate?-TAU*t/PATTERN_MYR:0,bar=state.galRotate?-TAU*t/BAR_MYR:0;
- const cp=Math.cos(pat),sp=Math.sin(pat),cb=Math.cos(bar),sb=Math.sin(bar),zs=clamp(state.zoom,.5,1.7);
- const center=project([0,0,0]);glow(center,26*state.zoom,'#f6d8ae',.25);
- for(const s of GAL){const cA=s.bar?cb:cp,sA=s.bar?sb:sp;const q=project([s.r*(s.ct*cA-s.st*sA),s.r*(s.st*cA+s.ct*sA),s.z]);if(q.x<-2||q.x>W+2||q.y<-2||q.y>H+2)continue;const d=s.s*zs;ctx.fillStyle=s.f;ctx.fillRect(q.x-d/2,q.y-d/2,d,d);}
- for(const h of HII){const th=h.th+pat,q=project([h.r*Math.cos(th),h.r*Math.sin(th),0]);if(q.x<-20||q.x>W+20||q.y<-20||q.y>H+20)continue;sprite(SPR.pink,q.x,q.y,Math.max(2.5,h.s*projection.scale),.45);}
- const orbit=[];for(let i=0;i<=180;i++)orbit.push([R*Math.cos(i*TAU/180),R*Math.sin(i*TAU/180),0]);screenPath(orbit,'#a0aebc',1,.22,false,[3,5]);
- if(state.tracers)drawTracers(t);
- if(state.armNames)drawArmNames(pat,bar);
- const span=state.galTrail,n=span>300?2400:900,points=[];for(let i=0;i<=n;i++)points.push(sunPos(t-span+span*i/n));fadedTrail(points,'#eaca8c',1.8,true);
- const pos=sunPos(t);
- screenPath([[pos[0],pos[1],0],[0,0,0]],'#ffb27a',.8,.35,false,[2,5]);textAt('≈26,700 light-years',[pos[0]*.5,pos[1]*.5,0],'#c9a687',9,4,-6);
- drawBlackHole(center.x,center.y,clamp(4.5*Math.sqrt(state.zoom),3.5,10),false);textAt('Sagittarius A*',[0,0,0],'#ffcf9f',10,14,22);
- drawMilestones();
- if(state.bob)screenPath([[pos[0],pos[1],0],pos],'#d9c08e',1,.65,false,[2,3]);const b={id:'sun',name:'Sun + all planets',label:'Sun + all planets',color:'#ffce83',r:7,p:pos};drawBody(b);bodyLabels([b]);
- drawGalScale();drawVerticalInset();}
-function drawVerticalInset(){if(!state.bob)return;const width=Math.min(160,W*.36),height=37,x=22,y=H-105;ctx.fillStyle='rgba(7,14,23,.72)';ctx.fillRect(x-7,y-19,width+14,height+30);ctx.font='8px '+FONT;ctx.fillStyle='#93a6b7';ctx.fillText('ONE VERTICAL CYCLE · '+M.VERTICAL_PERIOD_MYR+' Myr',x,y-7);ctx.strokeStyle='#3b4b5d';ctx.lineWidth=.7;ctx.beginPath();ctx.moveTo(x,y+height/2);ctx.lineTo(x+width,y+height/2);ctx.stroke();ctx.beginPath();for(let i=0;i<=120;i++){const px=x+width*i/120,py=y+height/2-Math.sin(i/120*TAU)*height*.43;if(i)ctx.lineTo(px,py);else ctx.moveTo(px,py);}ctx.strokeStyle='#b0a17f';ctx.lineWidth=1;ctx.stroke();const phase=((state.galTime/M.VERTICAL_PERIOD_MYR+M.Z_PHASE/TAU)%1+1)%1;ctx.fillStyle='#f2d392';ctx.beginPath();ctx.arc(x+width*phase,y+height/2-Math.sin(phase*TAU)*height*.43,3,0,TAU);ctx.fill();}
-
-/* ---------- Sagittarius A*: stars (S2 region / S-cluster) ---------- */
-function drawScaleBar(){let L=50;for(const o of [50,100,250,500,1000,2000,5000])if(o*projection.scale<=170)L=o;const px=L*projection.scale,x=24,y=H-112;ctx.strokeStyle='#cbb894';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+px,y);ctx.moveTo(x,y-4);ctx.lineTo(x,y+4);ctx.moveTo(x+px,y-4);ctx.lineTo(x+px,y+4);ctx.stroke();ctx.font='9px '+FONT;ctx.fillStyle='#cbb894';ctx.fillText(fmt(L,0)+' AU ≈ '+Math.round(L/30.07)+'× Neptune’s distance from the Sun',x,y-8);}
-function drawStars(){const t=state.sgrTime,wide=state.sgrZoom==='wide',c=project([0,0,0]);const g=ctx.createRadialGradient(c.x,c.y,0,c.x,c.y,Math.min(W,H)*.45);g.addColorStop(0,'rgba(255,170,100,.10)');g.addColorStop(1,'rgba(255,170,100,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
- for(const s of cluster){const q=project(s.p);if(q.x<0||q.x>W||q.y<0||q.y>H)continue;ctx.fillStyle='rgba(235,220,200,'+s.a+')';ctx.fillRect(q.x,q.y,s.r,s.r);}
- for(const s of S_STARS){if(state.sOrbits){const pa=precAngle(s,t),cd=Math.cos(pa),sd=Math.sin(pa);screenPath(s.path.map(([x,y])=>s.map3(x*cd-y*sd,x*sd+y*cd)),s.color,.8,s.cand?.16:.26,true,[3,4]);}
-  if(state.sTrails){const span=state.precess?s.P*3:s.P*.6,n=state.precess?1200:(s.name==='S2'?1000:500),pts=[];for(let i=0;i<=n;i++)pts.push(starAt(s,t-span*(1-i/n)));fadedTrail(pts,s.color,s.name==='S2'?2:1.2,s.name==='S2');}}
- const s2=S_STARS[0],pq=project(starAt(s2,s2.tp+s2.P*Math.round((t-s2.tp)/s2.P)));ctx.strokeStyle=rgba(s2.color,.7);ctx.lineWidth=1;ctx.beginPath();ctx.arc(pq.x,pq.y,3.5,0,TAU);ctx.stroke();
- const bodies=S_STARS.map(s=>{const p=starAt(s,t);return {s,p,q:project(p),...starSpeed(s,p)};}).sort((a,b)=>a.q.z-b.q.z);
- drawBlackHole(c.x,c.y,clamp(9*Math.sqrt(state.zoom)*(wide?.75:1),6,16),true,'4.3 million Suns');
- for(const b of bodies){if(b.q.x<-10||b.q.x>W+10||b.q.y<-10||b.q.y>H+10)continue;glow(b.q,4,b.s.color,.7);ctx.fillStyle=b.s.color;ctx.beginPath();ctx.arc(b.q.x,b.q.y,3.2,0,TAU);ctx.fill();
-  const txt=b.s.name+(b.s.cand?' (candidate)':'')+(state.sLabels?' · '+fmt(b.v,0)+' km/s':'');ctx.font='10px '+FONT;const tw=ctx.measureText(txt).width,x=clamp(b.q.x+9,8,W-tw-8),y=clamp(b.q.y-7,108,H-64);ctx.fillStyle='rgba(8,15,25,.7)';ctx.fillRect(x-3,y-10,tw+6,14);ctx.fillStyle=b.s.color;ctx.fillText(txt,x,y);}
- if(state.precess)screenText('Precession exaggerated ×40 (real: ≈12′ per orbit for S2)',24,H-130,'rgba(255,200,160,.85)');
- drawScaleBar();}
-
-/* ---------- Sagittarius A*: event-horizon close-up ---------- */
-function drawHorizon(){const t=state.hzTime,c=project([0,0,0]),k=projection.scale;
- const g=ctx.createRadialGradient(c.x,c.y,0,c.x,c.y,18*k);g.addColorStop(0,'rgba(255,150,80,.16)');g.addColorStop(1,'rgba(255,150,80,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
- screenPath(ring3(9.12),'#9fb0c0',.8,.4,true,[2,4]);textAt('Mercury’s orbit, if our Sun sat here (9 Rg)',[9.12*Math.cos(-.7),9.12*Math.sin(-.7),0],'rgba(180,195,210,.85)',9,6,4);
- screenPath(ring3(6),'#79e0ce',.9,.5,true,[4,4]);textAt('Innermost stable orbit · 6 Rg',[6*Math.cos(2.3),6*Math.sin(2.3),0],'rgba(140,230,210,.9)',9,-150,0);
- screenPath(ring3(3),'#ffd2a6',.8,.45,true,[1,3]);
- const gas=GAS.map(b=>{const a=b.ph+hzAngle(b.r,t),p=[b.r*Math.cos(a),b.r*Math.sin(a),b.z];return {b,q:project(p)};});
- for(const o of gas)if(o.q.z<0)sprite(SPR.hot,o.q.x,o.q.y,o.b.s*k*.9,o.b.a);
- const hot=[];for(let i=0;i<=120;i++){const a=hzAngle(HOT_R,t-HOT_T*.7*(1-i/120));hot.push([HOT_R*Math.cos(a),HOT_R*Math.sin(a),0]);}
- const ha=hzAngle(HOT_R,t),hp=[HOT_R*Math.cos(ha),HOT_R*Math.sin(ha),0],hq=project(hp);
- const back=hq.z<0;if(back){fadedTrail(hot,'#fff1d6',2.2,true);sprite(SPR.white,hq.x,hq.y,1.3*k,.9);}
- const rs=5.2*k,rg=ctx.createRadialGradient(c.x,c.y,rs*.95,c.x,c.y,rs*1.6);rg.addColorStop(0,'rgba(255,190,120,.55)');rg.addColorStop(1,'rgba(255,150,80,0)');ctx.fillStyle=rg;ctx.beginPath();ctx.arc(c.x,c.y,rs*1.6,0,TAU);ctx.fill();
- ctx.fillStyle='#000';ctx.beginPath();ctx.arc(c.x,c.y,rs,0,TAU);ctx.fill();
- ctx.strokeStyle='rgba(255,220,180,.95)';ctx.lineWidth=Math.max(1.5,.3*k);ctx.beginPath();ctx.arc(c.x,c.y,rs,0,TAU);ctx.stroke();
- ctx.setLineDash([2,3]);ctx.strokeStyle='rgba(255,255,255,.45)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(c.x,c.y,2*k,0,TAU);ctx.stroke();ctx.setLineDash([]);
- for(const o of gas)if(o.q.z>=0)sprite(SPR.hot,o.q.x,o.q.y,o.b.s*k*.9,o.b.a);
- if(!back){fadedTrail(hot,'#fff1d6',2.2,true);sprite(SPR.white,hq.x,hq.y,1.3*k,.95);}
- ctx.fillStyle='#fffaf0';ctx.beginPath();ctx.arc(hq.x,hq.y,Math.max(2,.25*k),0,TAU);ctx.fill();
- screenText('Flare hot spot · ≈113,000 km/s (0.38 c)',hq.x+10,hq.y-10,'#fff1d6',10,'500 ');
- screenText('Shadow + bright ring (what the EHT imaged)',c.x+rs+8,c.y-rs*.7,'rgba(255,215,175,.9)');
- screenText('Event horizon · 2 Rg ≈ 12.7 million km',c.x+rs+8,c.y-rs*.7+13,'rgba(230,230,230,.75)');
- screenText('Photon sphere · 3 Rg (light can orbit)',c.x+rs+8,c.y-rs*.7+26,'rgba(255,210,166,.75)');
- const sq=project([0,-13,0]);ctx.fillStyle='#ffd27a';ctx.beginPath();ctx.arc(sq.x,sq.y,Math.max(1.2,.11*k),0,TAU);ctx.fill();screenText('Our Sun, drawn to scale',sq.x+8,sq.y+4,'rgba(255,214,140,.9)');
- const px=5*k,x=24,y=H-112;ctx.strokeStyle='#cbb894';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+px,y);ctx.moveTo(x,y-4);ctx.lineTo(x,y+4);ctx.moveTo(x+px,y-4);ctx.lineTo(x+px,y+4);ctx.stroke();ctx.font='9px '+FONT;ctx.fillStyle='#cbb894';ctx.fillText('5 Rg ≈ 32 million km ≈ 0.21 AU',x,y-8);}
-
-function render(){fitProjection();bodyHits=[];ctx.setTransform(DPR,0,0,DPR,0,0);background();if(state.scene==='galaxy')drawGalaxy();else if(state.scene==='sgr'){if(state.sgrZoom==='horizon')drawHorizon();else drawStars();}else{drawSky();drawLocal();}dirty=false;}
-function resize(){const box=$('stage').getBoundingClientRect();W=box.width;H=box.height;DPR=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.round(W*DPR);canvas.height=Math.round(H*DPR);dirty=true;render();}
-function resetCamera(){const narrow=$('stage').getBoundingClientRect().width<500;
- if(state.scene==='journey'){state.az=narrow?3.85:3.6;state.el=narrow?.62:.3;}
- else if(state.scene==='solar'){const n=M.toGalactic([0,0,1]);state.az=Math.atan2(n[1],n[0]);state.el=Math.asin(n[2]);}
- else if(state.scene==='galaxy'){state.az=-1.0;state.el=.55;}
- else if(state.sgrZoom==='horizon'){state.az=-1.2;state.el=.4;}
- else{state.az=-1.2;state.el=1.05;}
- state.zoom=1;document.querySelectorAll('[data-camera]').forEach(b=>b.setAttribute('aria-pressed','false'));dirty=true;}
-function updatePlay(){$('play').setAttribute('aria-label',state.paused?'Play animation':'Pause animation');$('play').setAttribute('aria-pressed',String(state.paused));$('playGlyph').textContent=state.paused?'▶':'Ⅱ';}
-function pause(value,notify=false){state.paused=value;updatePlay();if(notify)announce(value?'Animation paused.':'Animation playing.');dirty=true;}
-const clockKey=()=>state.scene==='galaxy'?'galTime':state.scene==='sgr'?(state.sgrZoom==='horizon'?'hzTime':'sgrTime'):'time';
-const rateKey=()=>state.scene==='galaxy'?'galRate':state.scene==='sgr'?(state.sgrZoom==='horizon'?'hzRate':'sgrRate'):'rate';
-function speedOptions(){const cfg=state.scene==='galaxy'?[[1,5,10,25,50],' Myr / sec']:isHorizon()?[[1,2,5,10,30],' min / sec']:state.scene==='sgr'?[[.25,.5,1,2,5],' yr / sec']:[[.1,.5,1,5,20,50],' yr / sec'];$('speed').innerHTML=cfg[0].map(v=>'<option value="'+v+'">'+v+cfg[1]+'</option>').join('');$('speed').value=String(state[rateKey()]);}
-function configTimeline(){const tl=$('timeline'),cfg=state.scene==='galaxy'?['-600','460','.1','Millions of years from today','+10 Myr','Advance ten million years and pause']:isHorizon()?['0','240','.1','Minutes','+10 min','Advance ten minutes and pause']:state.scene==='sgr'?['1980','2045','.05','Calendar year','+1 year','Advance one year and pause']:['0','200','.01','Simulation time in Earth years','+1 year','Advance one Earth year and pause'];
- tl.min=cfg[0];tl.max=cfg[1];tl.step=cfg[2];tl.setAttribute('aria-label',cfg[3]);$('step').textContent=cfg[4];$('step').setAttribute('aria-label',cfg[5]);}
-function updateFocus(){const sc=state.scene,galaxy=sc==='galaxy',p=P.find(x=>x.id===state.focus);
- if(sc==='sgr'){const hz=state.sgrZoom==='horizon';$('focusLabel').textContent='The heart of the Milky Way';$('focusName').textContent='Sagittarius A*';$('focusSub').textContent='Our galaxy’s central black hole';$('planetOrb').style.background='radial-gradient(circle,#000 36%,#ffc27a 44%,#a4522a 58%,#101b28 78%)';
-  $('factA').innerHTML=hz?'0.17 <small>AU</small>':'4.3M <small>Suns</small>';$('factALabel').textContent=hz?'event-horizon width':'mass';$('factB').innerHTML=hz?'≈41 <small>min</small>':'26,700 <small>ly</small>';$('factBLabel').textContent=hz?'hot-spot orbit':'from the Sun';
-  $('focusCopy').textContent='From Earth, Sgr A* appears to drift about 6.4 milliarcseconds a year across the sky. The black hole is nearly still; that drift is our own orbital motion around it, seen in reverse.';}
- else{$('focusLabel').textContent=galaxy?'Our star’s galactic journey':'Planet in focus';$('focusName').textContent=galaxy?'The Sun':p.name;$('focusSub').textContent=galaxy?'Taking the planets along':p.id==='earth'?'Our home, on the move':'One of eight travelling worlds';$('planetOrb').style.background=galaxy?'radial-gradient(circle at 33% 28%,#fff6d3,#e9b456 43%,#8f5229 82%)':'radial-gradient(circle at 33% 28%,#e5fff6,'+p.color+' 28%,#28465c 65%,#101b28 85%)';$('factA').innerHTML=galaxy?'230 <small>Myr</small>':fmt(p.period,p.period<10?2:1)+' <small>yr</small>';$('factALabel').textContent=galaxy?'galactic orbit':'orbital period';$('factB').innerHTML=galaxy?'230 <small>km/s</small>':fmt(p.a,2)+' <small>AU</small>';$('factBLabel').textContent=galaxy?'adopted speed':'semimajor axis';
-  $('focusCopy').textContent=galaxy?'Time 0 is today. One galactic year ago, when the first dinosaurs appeared, the Sun was at the same angle around the centre but at a different height and distance. Blue stars show the inner galaxy lapping us.':sc==='solar'?p.name+' returns around the Sun. The same orbital motion also appears inside the travelling view.':'The highlighted trail combines '+p.name+"'s orbit with the Sun's onward motion around Sagittarius A*.";}
- document.querySelectorAll('[data-planet]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.planet===state.focus)));}
-function updateScale(){const sc=state.scene,physical=state.scale==='physical',galaxy=sc==='galaxy',sgr=sc==='sgr',hz=isHorizon();document.querySelectorAll('[data-scale]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.scale===state.scale)));
- $('scaleTag').textContent=hz?'Gravitational radii · simplified':sgr?'Distances to scale · bodies enlarged':galaxy?(state.bob?'Galaxy schematic · height ×15':'Galaxy schematic · no vertical motion'):physical?'Physical distances · bodies enlarged':'Illustrative scale';$('scaleTag').classList.toggle('physical',(physical&&isLocal())||sgr);
- $('galaxyModelNote').innerHTML='Vertical cycle: <strong>'+M.VERTICAL_PERIOD_MYR+' Myr</strong>, crossing the midplane about every <strong>32 Myr</strong>. Today ≈20 pc north and rising'+(state.bob?'':' (off)')+'.<br>Radial wobble: ≈'+M.EPI_AMP_PC+' pc in and out every ≈'+M.EPI_PERIOD_MYR+' Myr'+(state.epi?'':' (off)')+'.<br>Arms turn as a pattern (≈'+PATTERN_MYR+' Myr), the bar faster (≈'+BAR_MYR+' Myr). Arms are density waves; stars drift through them.';
- $('scaleCopy').innerHTML=physical?'Orbital distances and solar travel share one AU scale. <strong>Body markers stay enlarged.</strong>':sc==='solar'?'Orbital spacing compressed to show all eight planets. <strong>Period ratios preserved.</strong>':'Orbit spacing compressed; forward travel reduced <strong>24.3×</strong> at Earth\'s scale. Period ratios preserved.';
- $('scaleFootnote').textContent=hz?'Simplified: non-spinning black hole, Newtonian orbit timing, no light bending or Doppler beaming drawn. 1 Rg = GM/c² ≈ 6.35 million km ≈ 0.042 AU. Earth’s orbit would be 23.6 Rg in radius, off this screen.':sgr?'S-star orbits approximate (after Gillessen et al. 2017 and GRAVITY 2018–2020; S4714 from Peißker et al. 2020, disputed), assuming 8.28 kpc. 1 AU ≈ 149.6 million km. The event horizon is only ≈0.17 AU across.':galaxy?'Separate million-year clock; time 0 = today. Schematic structure based on published maps. 1 scene unit ≈ 4,000 light-years.':'All body sizes enlarged. 1 AU ≈ 149.6 million km. The planes intersect at ≈60.2°. Sky objects shown in their true directions; rotate to find Andromeda and the Magellanic Clouds.';}
-function updateTime(){const sc=state.scene,tl=$('timeline'),hz=isHorizon();let t,txt;
- if(sc==='galaxy'){t=state.galTime;txt=Math.abs(t)<.05?'Today':t>0?'+'+fmt(t,1)+' Myr':fmt(-t,1)+' Myr ago';}
- else if(hz){t=state.hzTime;txt=fmt(t,1)+' min';}
- else if(sc==='sgr'){t=state.sgrTime;txt='Year '+fmt(t,1);}
- else{t=state.time;txt=fmt(t,2)+' years';}
- $('timeValue').textContent=txt;const base=sc==='galaxy'?460:hz?240:sc==='sgr'?2045:200;let max=Math.max(base,Number(tl.max)||base);if(t>max)max=sc==='sgr'&&!hz?Math.ceil(t/10)*10:Math.ceil(t/base)*base;tl.max=String(max);if(document.activeElement!==tl)tl.value=String(t);tl.setAttribute('aria-valuetext',txt);
- if(sc==='galaxy'){$('distanceValue').textContent=fmt(t/M.GALACTIC_PERIOD_MYR,2);$('distanceUnit').textContent='laps';}
- else if(hz){$('distanceValue').textContent='≈113,000';$('distanceUnit').textContent='km/s';$('distanceNote').textContent='≈38% of light speed, one lap every ≈41 minutes at ≈7 Rg. Mercury, a little farther from our far lighter Sun, takes 88 days.';}
- else if(sc==='sgr'){let best=null;for(const s of S_STARS){const o=starSpeed(s,starAt(s,t));if(!best||o.v>best.v)best={s,...o};}$('distanceValue').textContent=fmt(best.v,0);$('distanceUnit').textContent='km/s';$('distanceNote').textContent=best.s.name+(best.s.cand?' (candidate)':'')+' · '+fmt(best.v/2997.92458,1)+'% of light speed · '+fmt(best.r,0)+' AU from the black hole. Our Sun: 230 km/s.';}
- else{const d=t*M.SUN_AU_PER_YEAR;$('distanceValue').textContent=fmt(d,d<1000?2:0);$('distanceUnit').textContent='AU';const v=earthVel(t);
-  if(sc==='journey'){const gal=Math.hypot(v[0],v[1]+M.SUN_AU_PER_YEAR,v[2])*KMS;$('distanceNote').textContent='Physical distance since model time zero, at 230 km/s. Earth right now: '+fmt(gal,1)+' km/s in this frame. Its tilted orbit adds or subtracts up to ~15 km/s.';}
-  else $('distanceNote').textContent='Measured from the Sun, Earth isn’t drifting at all. Its orbital speed right now is '+fmt(Math.hypot(...v)*KMS,2)+' km/s: fastest at perihelion, slowest at aphelion.';}}
-const SCENES={
- journey:{title:'Eight planets. One moving star.',caption:'Trails in a local Galactic frame. Camera follows the Sun; Sagittarius A* marks the galactic centre. Rotate to spot Andromeda and the Magellanic Clouds.',summary:'Planetary orbits plus the Sun’s translation, with the Milky Way band, Sagittarius A*, Andromeda and the Magellanic Clouds in the background.',say:'Galactic trajectories, with Sagittarius A* in the background.'},
- solar:{title:'The familiar view from our star.',caption:'Positions and trails measured relative to the Sun.',summary:'Planets and their nearly elliptical trails measured relative to the Sun.',say:'Sun-relative view. Planetary periods are unchanged.'},
- galaxy:{title:'One galactic year. A much longer journey.',caption:'Our place among the Milky Way’s bar and spiral arms. Time 0 = today.',summary:'A schematic Milky Way with a central bar and named spiral arms. The Sun circles Sagittarius A*, wobbling up and down and in and out, while inner stars lap it.',say:'Galaxy overview, with a million-year clock. Time zero is today.'},
- sgr:{title:'Sagittarius A*',caption:'',summary:'Stars and hot gas orbiting the supermassive black hole Sagittarius A*, with live speeds.',say:''}};
-function hintFor(sc){const head='<strong>Drag to rotate · pinch or scroll to zoom</strong><br>';if(sc==='galaxy')return head+'Gold: the Sun’s path · blue: other stars lapping at their own pace · rings: moments in Earth’s history';if(sc==='sgr')return head+(state.sgrZoom==='horizon'?'White blob: a flare hot spot · gas closer in orbits faster':'Labels show each star’s live speed · ring: S2’s closest point');const n=P.find(p=>p.id===state.focus).name;return head+'Bright trail: '+n+(sc==='journey'?' · gold line: the Sun':' · grey lines: orbit guides');}
-function setScene(scene){state.scene=scene;const local=isLocal(),galaxy=scene==='galaxy',sgr=scene==='sgr',S=SCENES[scene];
- document.querySelectorAll('[data-scene]').forEach(b=>{const active=b.dataset.scene===scene;b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});
- $('explorer-panel').setAttribute('aria-labelledby','tab-'+scene);
- $('localControls').hidden=!local;$('scaleControls').hidden=!local;$('galaxyControls').hidden=!galaxy;$('sgrControls').hidden=!sgr;$('planetLegend').hidden=!local;
- $('canvasSummary').textContent=S.summary;
- if(sgr){applySgrZoom(state.sgrZoom);return;}
- $('sceneTitle').textContent=S.title;$('sceneCaption').textContent=S.caption;
- $('distanceLabel').textContent=galaxy?'Galactic laps from today':'Sun’s forward travel';
- $('distanceNote').textContent=galaxy?'Using a 230-million-year galactic period. Drag the timeline left to go back in time.':'';
- configTimeline();$('viewHint').innerHTML=hintFor(scene);resetCamera();speedOptions();updateFocus();updateScale();updateTime();announce(S.say);dirty=true;}
-function applySgrZoom(z){state.sgrZoom=z;const Z=SGR_ZOOM[z];
- document.querySelectorAll('[data-sgrzoom]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sgrzoom===z)));
- $('sceneTitle').textContent=Z.title;$('sceneCaption').textContent=Z.caption;$('sgrInfo').innerHTML=Z.info;
- $('distanceLabel').textContent=z==='horizon'?'Hot-spot speed':'Fastest star right now';$('starOnly').hidden=z==='horizon';
- configTimeline();$('viewHint').innerHTML=hintFor('sgr');resetCamera();speedOptions();updateFocus();updateScale();updateTime();announce(Z.say);dirty=true;}
-function setFocus(id){if(id==='sun')return;state.focus=id;if(state.set==='inner'&&!P.slice(0,4).some(p=>p.id===id)){state.set='all';$('planetSet').value='all';}updateFocus();$('viewHint').innerHTML=hintFor(state.scene);dirty=true;announce(P.find(p=>p.id===id).name+' highlighted.');}
-
-/* ---------- Perspective counters & lifetime calculator ---------- */
-function updatePerspectives(now){const s=(now-pageStart)/1000,set=(id,v)=>{$(id).textContent=fmt(v,0);};
- set('liveKm',s*SPEEDS.gal);$('liveEq').textContent=fmt(s*SPEEDS.gal/40075,1);
- set('pSpin',s*SPEEDS.spin);set('pOrbit',s*SPEEDS.orbit);set('pGal',s*SPEEDS.gal);set('pCmb',s*SPEEDS.cmb);set('pMw',s*SPEEDS.mw);set('pAnd',s*SPEEDS.and);set('pS2',s*SPEEDS.s2);set('pFlare',s*SPEEDS.flare);
- const L=s*SPEEDS.light;set('pLight',L);set('pMoon',Math.floor(L/768800));
- const h=Math.floor(s/3600),m=Math.floor(s/60)%60,sec=Math.floor(s%60);
- $('elapsed').textContent='You opened this page '+(h?h+' h ':'')+(h||m?m+' min ':'')+sec+' s ago. Every counter above covers that same stretch of time.';}
-function updateLifetime(){const y=Number($('age').value),ids=['lLaps','lSunKm','lGalKm','lAU','lFrac','lDeg','lCmb','lLy','lWait'];
- if(!(y>0)||y>200){ids.forEach(id=>$(id).textContent='—');return;}
- const sec=y*M.SEC_PER_YEAR,g=sec*SPEEDS.gal,f=y/(M.GALACTIC_PERIOD_MYR*1e6);
- $('lLaps').textContent=fmt(y,y%1?1:0);$('lSunKm').textContent=bigNum(sec*SPEEDS.orbit);
- $('lGalKm').textContent=bigNum(g);$('lAU').textContent=fmt(y*M.SUN_AU_PER_YEAR,0);
- $('lFrac').textContent=tiny(f*100)+'%';$('lDeg').textContent=tiny(f*360);
- $('lCmb').textContent=bigNum(sec*SPEEDS.cmb);$('lLy').textContent=tiny(g/9.4607e12);
- $('lWait').textContent=fmt(Math.round(1/f),0);}
-$('age').addEventListener('input',updateLifetime);updateLifetime();
-
-/* ---------- Controls ---------- */
-for(const p of P){const b=document.createElement('button');b.className='planet-button';b.dataset.planet=p.id;b.style.setProperty('--planet-color',p.color);b.textContent=p.name;b.setAttribute('aria-pressed',String(p.id===state.focus));b.addEventListener('click',()=>setFocus(p.id));$('planetLegend').appendChild(b);}
-document.querySelectorAll('[data-scene]').forEach(b=>b.addEventListener('click',()=>setScene(b.dataset.scene)));
-document.querySelectorAll('[data-sgrzoom]').forEach(b=>b.addEventListener('click',()=>applySgrZoom(b.dataset.sgrzoom)));
-document.querySelector('.tabs').addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const list=[...document.querySelectorAll('[data-scene]')],N=list.length,idx=list.findIndex(b=>b.getAttribute('aria-selected')==='true');const n=e.key==='Home'?0:e.key==='End'?N-1:(idx+(e.key==='ArrowRight'?1:N-1))%N;list[n].focus();setScene(list[n].dataset.scene);});
-document.querySelectorAll('[data-scale]').forEach(b=>b.addEventListener('click',()=>{state.scale=b.dataset.scale;state.zoom=1;updateScale();dirty=true;announce(state.scale==='physical'?'Physical orbital distances and solar travel. Planet markers remain enlarged.':'Illustrative scale with compressed spacing and forward travel.');}));
-$('play').addEventListener('click',()=>pause(!state.paused,true));
-$('step').addEventListener('click',()=>{pause(true);state[clockKey()]+=(state.scene==='galaxy'||isHorizon())?10:1;updateTime();dirty=true;announce('Advanced to '+$('timeValue').textContent+'.');});
-$('timeline').addEventListener('input',()=>{pause(true);state[clockKey()]=Number($('timeline').value);updateTime();dirty=true;});
-$('speed').addEventListener('change',()=>{state[rateKey()]=Number($('speed').value);});
-$('planetSet').addEventListener('change',()=>{state.set=$('planetSet').value;if(state.set==='inner'&&!P.slice(0,4).some(p=>p.id===state.focus))setFocus('earth');state.zoom=1;dirty=true;});
-$('trailLength').addEventListener('change',()=>{state.history=Number($('trailLength').value);state.zoom=1;dirty=true;});
-$('galTrailSel').addEventListener('change',()=>{state.galTrail=Number($('galTrailSel').value);dirty=true;});
-for(const [id,key] of [['showTrails','trails'],['showOrbits','orbits'],['showPlanes','planes'],['showLabels','labels'],['showSgr','sgr'],['showStarTrails','sTrails'],['showStarOrbits','sOrbits'],['showSpeedLabels','sLabels'],['showPrecess','precess'],['galRotate','galRotate'],['showTracers','tracers'],['showArmNames','armNames']])$(id).addEventListener('change',()=>{state[key]=$(id).checked;dirty=true;});
-for(const [id,key] of [['showBob','bob'],['showEpi','epi']])$(id).addEventListener('change',()=>{state[key]=$(id).checked;updateScale();dirty=true;});
-$('earthCompare').addEventListener('click',()=>{state.focus='earth';state.set='focus';state.scale='physical';state.history=1;state.time=1;$('planetSet').value='focus';$('trailLength').value='1';setScene('journey');pause(true);announce('Earth’s physical one-year path. The Sun advances 48.5 AU while Earth completes an orbit of about 1 AU radius.');});
-$('s2Peri').addEventListener('click',()=>{if(state.sgrZoom!=='inner')applySgrZoom('inner');state.sgrTime=2017.4;state.sgrRate=.25;$('speed').value='0.25';updateTime();pause(false);announce('Replaying S2’s 2018 closest approach at a quarter year per second.');});
-function zoom(f){state.zoom=clamp(state.zoom*f,.45,4);dirty=true;}
-$('zoomIn').addEventListener('click',()=>zoom(1.18));$('zoomOut').addEventListener('click',()=>zoom(1/1.18));$('homeView').addEventListener('click',resetCamera);
-document.querySelectorAll('[data-camera]').forEach(b=>b.addEventListener('click',()=>{state.az=-1;state.el=b.dataset.camera==='above'?Math.PI/2-.001:.06;state.zoom=1;document.querySelectorAll('[data-camera]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));dirty=true;}));
-canvas.addEventListener('wheel',e=>{e.preventDefault();zoom(Math.exp(-e.deltaY*.001));},{passive:false});
-const pointers=new Map();let dragStart=null,pinchDistance=null,moved=false;
-canvas.addEventListener('pointerdown',e=>{canvas.setPointerCapture(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});dragStart={x:e.clientX,y:e.clientY,az:state.az,el:state.el};moved=false;if(pointers.size===2){const a=[...pointers.values()];pinchDistance=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);}});
-canvas.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId))return;const before=pointers.get(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pointers.size===2){const a=[...pointers.values()],distance=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);if(pinchDistance>0)zoom(distance/pinchDistance);pinchDistance=distance;moved=true;}else if(dragStart){state.az+=(e.clientX-before.x)*.007;state.el=clamp(state.el+(e.clientY-before.y)*.006,-1.5,1.5);if(Math.hypot(e.clientX-dragStart.x,e.clientY-dragStart.y)>4)moved=true;dirty=true;}});
-function endPointer(e){if(!pointers.has(e.pointerId))return;if(!moved&&isLocal()){const rect=canvas.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top;const hit=bodyHits.filter(b=>b.id!=='sun').sort((a,b)=>Math.hypot(x-a.x,y-a.y)-Math.hypot(x-b.x,y-b.y)).find(b=>Math.hypot(x-b.x,y-b.y)<b.r);if(hit)setFocus(hit.id);}pointers.delete(e.pointerId);pinchDistance=null;dragStart=null;if(pointers.size){const a=[...pointers.values()][0];dragStart={x:a.x,y:a.y,az:state.az,el:state.el};moved=true;}}
-canvas.addEventListener('pointerup',endPointer);canvas.addEventListener('pointercancel',e=>{pointers.delete(e.pointerId);dragStart=null;pinchDistance=null;});
-canvas.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','=','-','r','R'].includes(e.key)){e.preventDefault();if(e.key==='ArrowLeft')state.az-=.12;if(e.key==='ArrowRight')state.az+=.12;if(e.key==='ArrowUp')state.el=clamp(state.el+.12,-1.5,1.5);if(e.key==='ArrowDown')state.el=clamp(state.el-.12,-1.5,1.5);if(e.key==='+'||e.key==='=')zoom(1.15);if(e.key==='-')zoom(1/1.15);if(e.key.toLowerCase()==='r')resetCamera();dirty=true;}});
-document.addEventListener('keydown',e=>{if(e.code==='Space'&&!/^(INPUT|SELECT|BUTTON|SUMMARY|A)$/.test(document.activeElement.tagName)){e.preventDefault();pause(!state.paused,true);}});
-document.addEventListener('visibilitychange',()=>{lastFrame=performance.now();dirty=true;});
-if('IntersectionObserver'in window)new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;lastFrame=performance.now();if(visible)dirty=true;},{threshold:0}).observe($('stage'));
-if('ResizeObserver'in window)new ResizeObserver(resize).observe($('stage'));else window.addEventListener('resize',resize);
-document.querySelector('a[href="#science"]').addEventListener('click',()=>{$('science').open=true;});
-function loop(now){const dt=lastFrame?Math.min((now-lastFrame)/1000,.1):0;lastFrame=now;
- if(!state.paused&&!document.hidden&&visible){state[clockKey()]+=dt*state[rateKey()];dirty=true;}
- if(state.scene==='journey'&&state.sgr&&visible)dirty=true;
- if(dirty&&visible&&now-lastDraw>1000/30){render();lastDraw=now;}
- if(now-lastUI>100){updateTime();updatePerspectives(now);lastUI=now;}
- requestAnimationFrame(loop);}
-setScene('journey');updatePlay();resize();if(reduceMotion)announce('Animation starts paused to match your reduced-motion preference.');requestAnimationFrame(loop);
-window.OrbitExplorer=Object.freeze({getState:()=>({...state}),getProjection:()=>({...projection}),setScene,render,model:M,sStars:S_STARS});
-})();
-</script>
 </body>
 </html>
